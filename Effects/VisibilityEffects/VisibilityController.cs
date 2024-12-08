@@ -12,6 +12,7 @@ namespace BubbleZun.Effects.VisibilityEffects
     {
         // Start is called before the first frame update
         public bool hideOnStart = false;
+        public bool status = true;
         /*Tweening*/
         public bool tweenPos;
 
@@ -56,16 +57,20 @@ namespace BubbleZun.Effects.VisibilityEffects
         }
         void Start(){
             if (hideOnStart) {
+                status = false;
                 if (tweenAlpha) alphaEffect.SetAlpha(0);
                 if (tweenPos) posEffect.SetPos(0);
             }
             else {
+                status = true;
                 if (tweenAlpha) alphaEffect.SetAlpha(1);
                 if (tweenPos) posEffect.SetPos(1);
             }
         }
         
         public void Show(){
+            if (status) return;
+            status = true;
             onShow.Invoke();
             if (objectRoot) objectRoot.gameObject.SetActive(true);
             if (interactionRoot) interactionRoot.Enable();
@@ -73,6 +78,8 @@ namespace BubbleZun.Effects.VisibilityEffects
             if (tweenPos) posEffect.TweenPos(1);
         }
         public void Hide(){
+            if (!status) return;
+            status = false;
             onHide.Invoke();
             if (objectRoot) objectRoot.gameObject.SetActive(false);
             if (interactionRoot) interactionRoot.Disable();
