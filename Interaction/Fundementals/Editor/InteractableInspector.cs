@@ -7,6 +7,7 @@ namespace BubbleZun.Interaction
     [CustomEditor(typeof(Interactable), true)]
     public class InteractableInspector : Editor
     {
+        HashSet<string> customizedProperties = new HashSet<string>();
         private SerializedProperty interactionObject;
         private SerializedProperty bindInteractionObject;
         protected SerializedProperty claimFocusOnInteraction;
@@ -41,6 +42,11 @@ namespace BubbleZun.Interaction
             interactionObject = serializedObject.FindProperty("interactionObject");
             bindInteractionObject = serializedObject.FindProperty("bindInteractionObject");
             claimFocusOnInteraction = serializedObject.FindProperty("claimFocusOnInteraction");
+            customizedProperties.Clear();
+            customizedProperties.Add("interactionObject");
+            customizedProperties.Add("bindInteractionObject");
+            customizedProperties.Add("claimFocusOnInteraction");
+            customizedProperties.Add("m_Script");
         }
 
         public override void OnInspectorGUI()
@@ -61,8 +67,8 @@ namespace BubbleZun.Interaction
             serializedObject.Update();
 
             DrawInteractionObjectSection();
-            DrawOtherSettingSection();
             DrawCallBackSection();
+            DrawOtherSettingSection();
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -91,7 +97,17 @@ namespace BubbleZun.Interaction
         }
         protected virtual void DrawOtherSettingSection()
         {
-
+            EditorGUILayout.Space(5);
+            var iterator = serializedObject.GetIterator();
+            bool enterChildren = true;
+            while (iterator.NextVisible(enterChildren))
+            {
+                enterChildren = false;
+                if (!customizedProperties.Contains(iterator.name))
+                {
+                    EditorGUILayout.PropertyField(iterator, true);
+                }
+            }
         }
         protected virtual void DrawCallBackSection()
         {
@@ -113,6 +129,7 @@ namespace BubbleZun.Interaction
                                 iterator.type.Contains("UnityEvent"))
                             {
                                 EditorGUILayout.PropertyField(iterator, true);
+                                customizedProperties.Add(iterator.name);
                             }
                         }
                     }

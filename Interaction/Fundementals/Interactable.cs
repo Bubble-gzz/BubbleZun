@@ -29,11 +29,13 @@ namespace BubbleZun.Interaction{
         virtual public void CopySettings(Interactable interactable)
         {
             interactionObject = interactable.interactionObject;
+            bindInteractionObject = interactable.bindInteractionObject;
         }
         protected bool IsInteractable()
         {
             if (!bindInteractionObject) return true;
-            bool interactable = true;
+            return interactionObject.IsInteractable();
+            /*bool interactable = true;
             InteractionObject current = interactionObject;
             while (current != null)
             {
@@ -44,6 +46,7 @@ namespace BubbleZun.Interaction{
                 current = current.GetParent();
             }
             return interactable;
+            */
         }
         protected T InstallComponent<T>(ref T component) where T : Interactable
         {

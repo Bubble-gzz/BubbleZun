@@ -72,7 +72,13 @@ namespace BubbleZun.Interaction{
         public bool IsInteractable()
         {
             if (InteractionSystem.IsBlocked(this)) return false;
-            return currentState != InteractionState.Inactive;
+            InteractionObject currentObject = this;
+            while (currentObject != null)
+            {
+                if (currentObject.currentState == InteractionState.Inactive) return false;
+                currentObject = currentObject.Parent;
+            }
+            return true;
         }
         public bool IsFocused()
         {
@@ -99,6 +105,8 @@ namespace BubbleZun.Interaction{
         }
         public void SystemOperationOnly_LoseFocus()
         {
+            if (!IsFocused()) return;
+            Debug.Log(this.name + " Losing focus");
             onFocusLost.Invoke();
             currentState = InteractionState.Active;
             foreach (var effect in focusEffects)
@@ -108,7 +116,11 @@ namespace BubbleZun.Interaction{
         }
         public void ClaimFocus()
         {
-            Debug.Log(this.name + " Claiming focus");
+            //Debug.Log(this.name + " Claiming focus");
+            if (!IsInteractable()) { //血泪史：如果当前对象不可交互，则不设置为聚焦对象，否则可以通过同一帧微操巧妙避开屏蔽
+                //Debug.Log(this.name + " Claiming focus but not interactable");
+                return;
+            }
             InteractionSystem.SetFocusedObject(this);
         }
         public void ReleaseFocus()
@@ -118,7 +130,9 @@ namespace BubbleZun.Interaction{
         }
         public void SetExclusive()
         {
-            if (currentState != InteractionState.Focused) return; 
+            Debug.Log(this.name + " Setting exclusive");
+            if (currentState == InteractionState.Inactive) currentState = InteractionState.Active;
+            if (currentState != InteractionState.Focused) ClaimFocus();
             currentState = InteractionState.Exclusive;
         }
         public void QuitExclusive()
@@ -131,6 +145,7 @@ namespace BubbleZun.Interaction{
             currentState = InteractionState.Inactive;
         }
         public void Enable(){
+            if (currentState != InteractionState.Inactive) return;
             currentState = InteractionState.Active;
         }
     }

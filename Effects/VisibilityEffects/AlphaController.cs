@@ -11,12 +11,16 @@ namespace BubbleZun.Effects.VisibilityEffects{
         SpriteRenderer spriteRenderer;
         Image image;
         TextMeshProUGUI textMeshProUGUI;
-        float alpha = 1f;
+        CanvasGroup canvasGroup;
+        [SerializeField] float alpha = 1f;
         List<AlphaController> parentControllers = new List<AlphaController>();
+        string tweenName = "alpha";
         void Awake(){
             spriteRenderer = GetComponent<SpriteRenderer>();
             image = GetComponent<Image>();
             textMeshProUGUI = GetComponent<TextMeshProUGUI>();
+            canvasGroup = GetComponent<CanvasGroup>();
+            tweenName = "alpha" + GetInstanceID();
         }
 
         void Start()
@@ -27,7 +31,6 @@ namespace BubbleZun.Effects.VisibilityEffects{
         // Update is called once per frame
         public void FetchAlphaControllers()
         {
-            Debug.Log(Time.time + " FetchAlphaControllers");
             parentControllers.Clear();
             Transform current = transform.parent;
             while (current != null)
@@ -40,7 +43,12 @@ namespace BubbleZun.Effects.VisibilityEffects{
             }
         }
         public void TweenAlpha(float targetAlpha, float duration){
-            DOTween.To(() => alpha, x => alpha = x, targetAlpha, duration);
+            //Debug.Log("Time.time: " + Time.time + "TweenAlpha:[" + targetAlpha + " , " + duration + "]");
+            DOTween.Kill(tweenName);
+            DOTween.To(() => alpha, x => alpha = x, targetAlpha, duration).SetId(tweenName);
+        }
+        public void SetAlpha(float targetAlpha){
+            alpha = targetAlpha;
         }
         public float GetTotalAlpha(){
             float totalAlpha = alpha;
@@ -52,6 +60,10 @@ namespace BubbleZun.Effects.VisibilityEffects{
         void Update()
         {
             float totalAlpha = GetTotalAlpha();
+            if (canvasGroup != null) {
+                canvasGroup.alpha = totalAlpha;
+                return;
+            }
             if (spriteRenderer != null) spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, totalAlpha);
             if (image != null) image.color = new Color(image.color.r, image.color.g, image.color.b, totalAlpha);
             if (textMeshProUGUI != null) textMeshProUGUI.color = new Color(textMeshProUGUI.color.r, textMeshProUGUI.color.g, textMeshProUGUI.color.b, totalAlpha);

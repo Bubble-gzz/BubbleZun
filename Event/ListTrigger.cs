@@ -13,9 +13,14 @@ namespace BubbleZun.Event
 
     public class ListTrigger : MonoBehaviour
     {
+        [SerializeField] bool triggerOnAwake;
         [SerializeField]
         private List<EventTimePair> eventTimePairs = new List<EventTimePair>();
 
+        void Awake()
+        {
+            if (triggerOnAwake) TriggerEvents();
+        }
         public void TriggerEvents()
         {
             StartCoroutine(TriggerEventsCoroutine());

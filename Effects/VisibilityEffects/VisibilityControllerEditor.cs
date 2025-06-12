@@ -6,6 +6,7 @@ using BubbleZun.Effects.VisibilityEffects;
 public class VisibilityControllerEditor : Editor
 {
     // Tweening
+    private SerializedProperty status;
     private SerializedProperty hideOnStart;
     private SerializedProperty tweenPos;
     private SerializedProperty startPos;
@@ -55,6 +56,7 @@ public class VisibilityControllerEditor : Editor
     private void OnEnable()
     {
         // Tweening
+        status = serializedObject.FindProperty("status");
         hideOnStart = serializedObject.FindProperty("hideOnStart");
         tweenPos = serializedObject.FindProperty("tweenPos");
         startPos = serializedObject.FindProperty("startPos");
@@ -80,7 +82,7 @@ public class VisibilityControllerEditor : Editor
         serializedObject.Update();
 
         EditorGUILayout.PropertyField(hideOnStart);
-
+        EditorGUILayout.PropertyField(status);
         // Tweening Section
         EditorGUILayout.Space(5);
         using (new EditorGUILayout.VerticalScope(sectionStyle))

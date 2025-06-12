@@ -23,6 +23,7 @@ namespace BubbleZun.Interaction{
 
         void Update()
         {
+            //if (name == "SettingIcon") Debug.Log("[Time: " + Time.time + "] currentFocusedObject: " + InteractionSystem.Instance.currentFocusedObject);
             if (!IsAreaActive()) isMouseOver = false;
             else {
                 if (transparent) TransparentAreaCheck();
@@ -34,7 +35,7 @@ namespace BubbleZun.Interaction{
             if (isMouseOver != isMouseOverLastFrame)
             {
                 SetHighLight(isMouseOver);
-                if (isMouseOver) {
+                if (isMouseOver && IsInteractable()) {
                     onMouseEnter.Invoke();
                     if (blockNonUIObject) InteractionSystem.AddBlockingUIElement(this);
                     if (claimFocusOnInteraction) interactionObject.ClaimFocus();
@@ -89,9 +90,9 @@ namespace BubbleZun.Interaction{
                 UpdateStatus(rectTransform.rect.Contains(localPoint));
             }
         }
-        public void OnMouseEnter() { UpdateStatus(true); }
-        public void OnMouseExit() { UpdateStatus(false); }
-        public void OnPointerEnter(PointerEventData eventData) { UpdateStatus(true); }
-        public void OnPointerExit(PointerEventData eventData) { UpdateStatus(false); }
+        public void OnMouseEnter() { if (transparent) return; UpdateStatus(true); }
+        public void OnMouseExit() { if (transparent) return; UpdateStatus(false); }
+        public void OnPointerEnter(PointerEventData eventData) { if (transparent) return; UpdateStatus(true); }
+        public void OnPointerExit(PointerEventData eventData) { if (transparent) return; UpdateStatus(false); }
     }
 }

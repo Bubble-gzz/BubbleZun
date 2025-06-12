@@ -1,8 +1,10 @@
+/*
 using UnityEngine;
 using UnityEditor;
 #if UNITY_EDITOR
 namespace BubbleZun.Interaction
 {
+    
     [CustomEditor(typeof(MouseInteractable), true)]
     public class MouseInteractableInspector : InteractableInspector
     {
@@ -45,3 +47,4 @@ namespace BubbleZun.Interaction
     }
 } 
 #endif
+*/
