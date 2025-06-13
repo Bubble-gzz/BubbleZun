@@ -23,14 +23,15 @@ public class ColorPicker : Interactable, IDragHandler, IPointerDownHandler
     private float saturation = 1;
     private float value = 1;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         UpdateSVPanel();
         UpdateHueSlider();
         UpdateColor();
     }
 
-    void UpdateSVPanel()
+    void UpdateSVPanel(bool passive = false)
     {
         Texture2D texture = new Texture2D((int)SVPanel.rectTransform.rect.width, (int)SVPanel.rectTransform.rect.height);
         Color hueColor = Color.HSVToRGB(hue, 1, 1);
@@ -47,9 +48,12 @@ public class ColorPicker : Interactable, IDragHandler, IPointerDownHandler
         }
         texture.Apply();
         SVPanel.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+        if (passive) {
+            SVHandle.localPosition = new Vector2((saturation - 0.5f) * SVPanel.rectTransform.rect.width, (value - 0.5f) * SVPanel.rectTransform.rect.height);
+        }
     }
 
-    void UpdateHueSlider()
+    void UpdateHueSlider(bool passive = false)
     {
         Texture2D texture = new Texture2D((int)HueSlider.rectTransform.rect.width, (int)HueSlider.rectTransform.rect.height);
         
@@ -64,10 +68,14 @@ public class ColorPicker : Interactable, IDragHandler, IPointerDownHandler
         }
         texture.Apply();
         HueSlider.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+        if (passive) {
+            HueHandle.localPosition = new Vector2(HueHandle.localPosition.x, (hue - 0.5f) * HueSlider.rectTransform.rect.height);
+        }
     }
 
     void UpdateColor()
     {
+        if (interactionObject != null && !interactionObject.IsInteractable()) return;
         Color newColor = Color.HSVToRGB(hue, saturation, value);
         Output.color = newColor;
         onColorChange?.Invoke(newColor);
@@ -75,6 +83,7 @@ public class ColorPicker : Interactable, IDragHandler, IPointerDownHandler
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (interactionObject != null && !interactionObject.IsInteractable()) return;
         Vector2 localPos;
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(SVPanel.rectTransform, eventData.position, eventData.pressEventCamera, out localPos))
         {
@@ -109,9 +118,15 @@ public class ColorPicker : Interactable, IDragHandler, IPointerDownHandler
             }
         }
     }
-
+    public void SetColor(Color color)
+    {
+        Color.RGBToHSV(color, out hue, out saturation, out value);
+        UpdateSVPanel(true);
+        UpdateHueSlider(true);
+    }
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (interactionObject != null && !interactionObject.IsInteractable()) return;
         OnDrag(eventData);
     }
 }
