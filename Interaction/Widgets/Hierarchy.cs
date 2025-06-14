@@ -70,11 +70,15 @@ public class Hierarchy : MonoBehaviour
         RectTransform rectTransform = newEntry.GetComponent<RectTransform>();
         rectTransform.anchorMin = new Vector2(0, 1);
         rectTransform.anchorMax = new Vector2(1, 1);
+        if (parent != null) {
+            rectTransform.anchoredPosition = parent.GetComponent<RectTransform>().anchoredPosition;
+        }
 
         if (parent == null) root = newEntry;
         else {
             parent.children.Add(newEntry);
             parent.expanded = true;
+            
         }
 
         newEntry.parent = parent;
