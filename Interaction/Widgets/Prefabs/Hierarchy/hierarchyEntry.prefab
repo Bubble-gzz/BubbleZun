@@ -411,6 +411,7 @@ MonoBehaviour:
   expanded: 0
   parent: {fileID: 0}
   prev: {fileID: 0}
+  next: {fileID: 0}
   children: []
   expandIcon: {fileID: 316596298383324788}
   expandIconAlpha: {fileID: 3470557181958634498}
@@ -520,6 +521,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: BubbleZun.Interaction.HierarchyEntry, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 6098849007159716024}
+        m_TargetAssemblyTypeName: BubbleZun.Interaction.HierarchyEntry, Assembly-CSharp
+        m_MethodName: DragStart
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

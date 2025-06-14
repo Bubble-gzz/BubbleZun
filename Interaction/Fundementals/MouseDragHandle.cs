@@ -16,8 +16,9 @@ namespace BubbleZun.Interaction{
             base.GenerateComponents();
             InstallComponent(ref mouseDetector);
         }
-        void Update()
+        protected override void Update()
         {
+            base.Update();
             if (!IsInteractable()) return;
             InteractionCheck();
             MoveObject();

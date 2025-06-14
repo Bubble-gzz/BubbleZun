@@ -14,10 +14,11 @@ public class HierarchyEntry : MonoBehaviour
     public object bindObject;
     public int depth;
     public float y;
+    public float _y => rectTransform.localPosition.y;
     public bool expanded;
     public bool show{get; private set;}
     public HierarchyEntry parent;
-    public HierarchyEntry prev;
+    public HierarchyEntry prev, next;
     public List<HierarchyEntry> children = new List<HierarchyEntry>();
     public bool hasChildren => children.Count > 0;
     InteractionObject interactionObject;
@@ -58,6 +59,12 @@ public class HierarchyEntry : MonoBehaviour
                 else interactionObject.Disable();
             }
             lastShowState = show;
+        }
+        if (isDragging) {
+            if (Input.GetMouseButtonUp(0)) {
+                isDragging = false;
+                hierarchy.currentDraggingEntry = null;
+            }
         }
     }
     public void SetVisibility(bool visible)
@@ -124,6 +131,11 @@ public class HierarchyEntry : MonoBehaviour
             expandIcon.TweenRotation(expanded ? 1 : 0);
         }
     }
-
+    bool isDragging = false;
+    public void DragStart()
+    {
+        hierarchy.currentDraggingEntry = this;
+        isDragging = true;
+    }
 }
 }

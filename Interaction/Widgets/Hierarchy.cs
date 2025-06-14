@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using BubbleZun.Effects.AnimationEffects;
 namespace BubbleZun.Interaction
 {
 public class Hierarchy : MonoBehaviour
@@ -26,8 +27,9 @@ public class Hierarchy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
+
     HierarchyEntry lastEntry;
     public void UpdateHierarchy()
     {
@@ -43,9 +45,10 @@ public class Hierarchy : MonoBehaviour
         entries.Add(entry);
         entry.SetVisibility(show);
         entry.UpdateUI();
+        if (lastEntry != null) lastEntry.next = entry;
+
         if (show)
         {
-
             entry.prev = lastEntry;
             entry.y = lastEntry == null ? 0 : lastEntry.y - spacing;
             lastEntry = entry;
@@ -104,5 +107,6 @@ public class Hierarchy : MonoBehaviour
         CreateEntry(currentSelectedEntry, "Test" + entries.Count, null);
         UpdateHierarchy();
     }
+    public HierarchyEntry currentDraggingEntry;
 }
 }
