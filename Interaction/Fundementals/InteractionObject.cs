@@ -95,7 +95,7 @@ namespace BubbleZun.Interaction{
         }
         public void SystemOperationOnly_GainFocus()
         {
-            Debug.Log(this.name + " Gaining focus");
+            //Debug.Log(this.name + " Gaining focus");
             onFocusGained.Invoke();
             currentState = InteractionState.Focused;
             foreach (var effect in focusEffects)
@@ -106,7 +106,7 @@ namespace BubbleZun.Interaction{
         public void SystemOperationOnly_LoseFocus()
         {
             if (!IsFocused()) return;
-            Debug.Log(this.name + " Losing focus");
+            //Debug.Log(this.name + " Losing focus");
             onFocusLost.Invoke();
             currentState = InteractionState.Active;
             foreach (var effect in focusEffects)

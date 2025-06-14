@@ -43,6 +43,7 @@ namespace BubbleZun.Effects.AnimationEffects
         
         public void SetPos(int index)
         {
+            DOTween.Kill(tweenName);
             if (useScreenSpace)
             {
                 rectTransform.anchoredPosition = positions[index];

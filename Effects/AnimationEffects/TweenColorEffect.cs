@@ -43,24 +43,24 @@ namespace BubbleZun.Effects.AnimationEffects
             Color targetColor = colors[index];
             float duration = durations[index];
             CheckAlphaController();
-            if (alphaController != null) targetColor.a = 0;
+//            if (alphaController != null) targetColor.a = 0;
             //Debug.Log("["+Time.time+"] TweenColor: " + index + " in " + duration + "s");
             // 只处理RGB，保持Alpha不变
             Color rgbOnly = targetColor;
             DOTween.Kill(tweenName);
             if (spriteRenderer != null)
             {
-                spriteRenderer.DOBlendableColor(rgbOnly, duration).SetId(tweenName);
+                spriteRenderer.DOColor(rgbOnly, duration).SetId(tweenName);
             }
             
             if (image != null)
             {
-                image.DOBlendableColor(rgbOnly, duration).SetId(tweenName);
+                image.DOColor(rgbOnly, duration).SetId(tweenName);
             }
             
             if (textMeshProUGUI != null)
             {
-                textMeshProUGUI.DOBlendableColor(rgbOnly, duration).SetId(tweenName);
+                textMeshProUGUI.DOColor(rgbOnly, duration).SetId(tweenName);
             }
         }
     }

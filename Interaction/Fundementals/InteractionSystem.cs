@@ -26,7 +26,7 @@ namespace BubbleZun.Interaction{
                 while (v != _v) { v.SystemOperationOnly_LoseFocus(); v = v.GetParent(); }
             }
             Instance.currentFocusedObject = newObject;
-            Debug.Log("[Time: " + Time.time + "] Setting focused object to " + newObject.name);
+           //Debug.Log("[Time: " + Time.time + "] Setting focused object to " + newObject.name);
         }
         public static void ReleaseFocusedObject(InteractionObject objToRelease){
             InteractionObject u = Instance.currentFocusedObject;
@@ -39,31 +39,15 @@ namespace BubbleZun.Interaction{
             Instance.currentFocusedObject = u.GetParent();
         }
         public static bool IsBlocked(InteractionObject interactionObject){
-            bool debug = false;
-            //if (interactionObject.name == "SettingIcon") debug = true;
-        
             if (interactionObject.IsFocused()) {
-                if (debug) Debug.Log("[Time: " + Time.time + "] SettingIcon is already focused");
                 return false;
             }
             InteractionObject currentNode = Instance.currentFocusedObject;
-            //if (debug) Debug.Log("[Time: " + Time.time + "]");
-            if (currentNode != null)
-            {
-                if (debug) Debug.Log("[Time: " + Time.time + "] Current focused node is " + currentNode.name);
-            }
+            
             while (currentNode != null)
             {
-                if (debug)
-                {
-                    Debug.Log("SettingIcon checking block from " + currentNode.name);
-                }
                 if (IsBlockedByNode(interactionObject, currentNode)) return true;
                 currentNode = currentNode.GetParent();
-            }
-            if (debug)
-            {
-                //Debug.Log("SettingIcon is not blocked");
             }
             return false;
         }

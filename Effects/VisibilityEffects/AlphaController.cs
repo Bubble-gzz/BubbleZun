@@ -9,17 +9,17 @@ namespace BubbleZun.Effects.VisibilityEffects{
     {
         // Start is called before the first frame update
         SpriteRenderer spriteRenderer;
-        Image image;
-        TextMeshProUGUI textMeshProUGUI;
         CanvasGroup canvasGroup;
         [SerializeField] float alpha = 1f;
         List<AlphaController> parentControllers = new List<AlphaController>();
         string tweenName = "alpha";
         void Awake(){
             spriteRenderer = GetComponent<SpriteRenderer>();
-            image = GetComponent<Image>();
-            textMeshProUGUI = GetComponent<TextMeshProUGUI>();
             canvasGroup = GetComponent<CanvasGroup>();
+            if (spriteRenderer == null && canvasGroup == null)
+            {
+                canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            }
             tweenName = "alpha" + GetInstanceID();
         }
 
@@ -65,8 +65,6 @@ namespace BubbleZun.Effects.VisibilityEffects{
                 return;
             }
             if (spriteRenderer != null) spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, totalAlpha);
-            if (image != null) image.color = new Color(image.color.r, image.color.g, image.color.b, totalAlpha);
-            if (textMeshProUGUI != null) textMeshProUGUI.color = new Color(textMeshProUGUI.color.r, textMeshProUGUI.color.g, textMeshProUGUI.color.b, totalAlpha);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BubbleZun.Interaction;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 namespace BubbleZun.Interaction{
     public class MouseInteractable : Interactable
     {
@@ -12,6 +13,7 @@ namespace BubbleZun.Interaction{
         [HideInInspector] public bool useScreenSpace = false;
 
         public Collider2D detectArea;
+        public Graphic detectUI;
         public UnityEvent onMouseEnter = new UnityEvent();
         public UnityEvent onMouseExit = new UnityEvent();
         protected override void Awake()
@@ -20,6 +22,13 @@ namespace BubbleZun.Interaction{
             useScreenSpace = GetComponentInParent<Canvas>() != null;
             if (!useScreenSpace) blockNonUIObject = false;
             if (detectArea == null) detectArea = GetComponent<Collider2D>();
+        }
+        protected virtual void Update()
+        {
+            if (detectUI != null)
+            {
+                detectUI.raycastTarget = IsInteractable();
+            }
         }
         public override void CopySettings(Interactable interactable){
             base.CopySettings(interactable);

@@ -15,14 +15,17 @@ public class HierarchyEntry : MonoBehaviour
     public int depth;
     public float y;
     public bool expanded;
-    public bool show;
+    public bool show{get; private set;}
     public HierarchyEntry parent;
     public HierarchyEntry prev;
     public List<HierarchyEntry> children = new List<HierarchyEntry>();
     public bool hasChildren => children.Count > 0;
+    InteractionObject interactionObject;
 
-    public UnityEvent<bool> onVisibilityChanged = new UnityEvent<bool>();
-    
+    TweenAlphaEffect alphaEffect;
+    [SerializeField] TweenRotationEffect expandIcon;
+    [SerializeField] TweenAlphaEffect expandIconAlpha;
+
     public string id{
         get => text.text;
         set => text.text = value;
@@ -33,24 +36,35 @@ public class HierarchyEntry : MonoBehaviour
     {
         if (selectState == null) selectState = GetComponent<ITwoPhase>();
         rectTransform = GetComponent<RectTransform>();
+        if (alphaEffect == null) alphaEffect = GetComponent<TweenAlphaEffect>();
     }
     void Start()
     {
-        
+        if (expandIcon != null) expandIcon.SetRotation(expanded ? 1 : 0);        
     }
 
     // Update is called once per frame
     RectTransform rectTransform;
+    bool lastShowState = false;
     void Update()
     {
         Vector2 targetPos = new Vector2(hierarchy.indent * depth, y);
         rectTransform.anchoredPosition = Vector2.Lerp(rectTransform.anchoredPosition, targetPos, Time.deltaTime * 10);
+        if (lastShowState != show)
+        {
+            if (interactionObject == null) interactionObject = GetComponent<InteractionObject>();
+            if (interactionObject != null) {
+                if (show) interactionObject.Enable();
+                else interactionObject.Disable();
+            }
+            lastShowState = show;
+        }
     }
     public void SetVisibility(bool visible)
     {
         if (visible == show) return;
         show = visible;
-        onVisibilityChanged.Invoke(visible);
+        if (alphaEffect != null) alphaEffect.TweenAlpha(visible ? 1 : 0);
     }
 
     bool selected = false;
@@ -89,6 +103,26 @@ public class HierarchyEntry : MonoBehaviour
     public void TurnOn()
     {
         selectState.TurnOn();
+    }
+    public void ToggleExpand()
+    {
+        expanded = !expanded;
+        if (expandIcon != null)
+        {
+            expandIcon.TweenRotation(expanded ? 1 : 0);
+        }
+        hierarchy.UpdateHierarchy();
+    }
+    public void UpdateUI()
+    {
+        if (expandIconAlpha != null) 
+        {
+            expandIconAlpha.TweenAlpha(children.Count > 0 ? 1 : 0);
+        }
+        if (expandIcon != null)
+        {
+            expandIcon.TweenRotation(expanded ? 1 : 0);
+        }
     }
 
 }

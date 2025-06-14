@@ -20,8 +20,9 @@ namespace BubbleZun.Interaction{
             InstallComponent(ref mouseDetector);
         }
         // Update is called once per frame
-        void Update()
+        protected override void Update()
         {
+            base.Update();
             if (!IsInteractable()) return;
             if (!mouseDetector.isMouseOver) return;
             if (Input.GetMouseButtonDown(0)) {

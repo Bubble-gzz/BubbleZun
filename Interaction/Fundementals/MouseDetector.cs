@@ -21,8 +21,9 @@ namespace BubbleZun.Interaction{
         // Update is called once per frame
         bool isMouseOverLastFrame = false;
 
-        void Update()
+        protected override void Update()
         {
+            base.Update();
             //if (name == "SettingIcon") Debug.Log("[Time: " + Time.time + "] currentFocusedObject: " + InteractionSystem.Instance.currentFocusedObject);
             if (!IsAreaActive()) isMouseOver = false;
             else {

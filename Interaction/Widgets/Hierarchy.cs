@@ -41,7 +41,8 @@ public class Hierarchy : MonoBehaviour
         entry.depth = depth;
         entry.parent = parent;
         entries.Add(entry);
-        entry.show = show;
+        entry.SetVisibility(show);
+        entry.UpdateUI();
         if (show)
         {
 
