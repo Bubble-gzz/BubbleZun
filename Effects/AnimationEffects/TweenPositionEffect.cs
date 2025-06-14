@@ -12,7 +12,7 @@ namespace BubbleZun.Effects.AnimationEffects
         public List<Ease> easings = new List<Ease>();
         
         private RectTransform rectTransform;
-        
+        string tweenName = "TweenPosition_";
         void Awake()
         {
             useScreenSpace = GetComponentInParent<Canvas>() != null;
@@ -20,22 +20,24 @@ namespace BubbleZun.Effects.AnimationEffects
             {
                 rectTransform = GetComponent<RectTransform>();
             }
+            tweenName += gameObject.GetInstanceID();
         }
         
         public void TweenPos(int index)
         {
+            DOTween.Kill(tweenName);
             if (useScreenSpace)
             {
                 // UI对象使用DOAnchorPos
                 rectTransform.DOAnchorPos(positions[index], durations[index])
-                    .SetEase(easings[index]);
+                    .SetEase(easings[index]).SetId(tweenName);
             }
             else
             {
                 // 非UI对象使用DOMove
                 Vector3 newPos = new Vector3(positions[index].x, positions[index].y, transform.position.z);
                 transform.DOMove(newPos, durations[index])
-                    .SetEase(easings[index]);
+                    .SetEase(easings[index]).SetId(tweenName);
             }
         }
         

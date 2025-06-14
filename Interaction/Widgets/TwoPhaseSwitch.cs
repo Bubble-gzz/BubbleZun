@@ -56,5 +56,10 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
             }
         }
     }
+    public void ReplayCurrentState(bool animated = true)
+    {
+        if (isOn) TurnOn(animated);
+        else TurnOff(animated);
+    }
 }
 }

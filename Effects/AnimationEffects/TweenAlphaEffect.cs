@@ -29,7 +29,7 @@ namespace BubbleZun.Effects.AnimationEffects
         }
         public void TweenAlpha(int index){
             CheckAlphaController();
-            alphaController.TweenAlpha(alphas[index], durations[index]);
+            alphaController.TweenAlpha(alphas[index], durations[index]);    
         }
         public void SetAlpha(int index){
             CheckAlphaController();

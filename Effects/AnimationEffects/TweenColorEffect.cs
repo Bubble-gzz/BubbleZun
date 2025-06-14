@@ -16,12 +16,14 @@ namespace BubbleZun.Effects.AnimationEffects
         Image image;
         TextMeshProUGUI textMeshProUGUI;
         AlphaController alphaController;
+        string tweenName = "TweenColor_";
         void Awake()
         {
             if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
             if (image == null) image = GetComponent<Image>();
             if (textMeshProUGUI == null) textMeshProUGUI = GetComponent<TextMeshProUGUI>();
             alphaController = GetComponent<AlphaController>();
+            tweenName += gameObject.GetInstanceID();
         }
         void Start()
         {
@@ -42,22 +44,23 @@ namespace BubbleZun.Effects.AnimationEffects
             float duration = durations[index];
             CheckAlphaController();
             if (alphaController != null) targetColor.a = 0;
+            //Debug.Log("["+Time.time+"] TweenColor: " + index + " in " + duration + "s");
             // 只处理RGB，保持Alpha不变
             Color rgbOnly = targetColor;
-
+            DOTween.Kill(tweenName);
             if (spriteRenderer != null)
             {
-                spriteRenderer.DOBlendableColor(rgbOnly, duration);
+                spriteRenderer.DOBlendableColor(rgbOnly, duration).SetId(tweenName);
             }
             
             if (image != null)
             {
-                image.DOBlendableColor(rgbOnly, duration);
+                image.DOBlendableColor(rgbOnly, duration).SetId(tweenName);
             }
             
             if (textMeshProUGUI != null)
             {
-                textMeshProUGUI.DOBlendableColor(rgbOnly, duration);
+                textMeshProUGUI.DOBlendableColor(rgbOnly, duration).SetId(tweenName);
             }
         }
     }
