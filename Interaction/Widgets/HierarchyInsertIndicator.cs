@@ -26,6 +26,13 @@ public class HierarchyInsertIndicator : MonoBehaviour
     {
         if (hierarchy.currentDraggingEntry != null) UpdatePosition();
         UpdateUI();
+        if (Input.GetMouseButtonUp(0) && hierarchy.currentDraggingEntry != null) {
+            if (InsertAfter) {
+                hierarchy.MoveAfter(hierarchy.currentDraggingEntry, InsertEntry);
+            } else {
+                hierarchy.ChangeParent(hierarchy.currentDraggingEntry, InsertEntry);
+            }
+        }
     }
 
     // Update is called once per frame

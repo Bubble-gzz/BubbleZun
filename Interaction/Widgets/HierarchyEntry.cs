@@ -137,5 +137,14 @@ public class HierarchyEntry : MonoBehaviour
         hierarchy.currentDraggingEntry = this;
         isDragging = true;
     }
+    public bool IsChildOf(HierarchyEntry entry)
+    {
+        HierarchyEntry parent = this;
+        while (parent != null) {
+            if (parent == entry) return true;
+            parent = parent.parent;
+        }
+        return false;
+    }
 }
 }

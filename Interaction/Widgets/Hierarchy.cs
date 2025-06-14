@@ -108,5 +108,31 @@ public class Hierarchy : MonoBehaviour
         UpdateHierarchy();
     }
     public HierarchyEntry currentDraggingEntry;
+    public void ChangeParent(HierarchyEntry entry, HierarchyEntry newParent)
+    {
+        if (newParent == null) return;
+        if (entry.parent == newParent) return;
+        if (newParent.IsChildOf(entry)) return;
+        entry.parent.children.Remove(entry);
+        newParent.children.Add(entry);
+        entry.parent = newParent;
+        newParent.expanded = true;
+        UpdateHierarchy();
+    }
+    public void MoveAfter(HierarchyEntry entry, HierarchyEntry newPrev)
+    {
+        if (newPrev == null) return;
+        if (newPrev.IsChildOf(entry)) return;
+        HierarchyEntry newParent = newPrev.parent;
+        for (int i = 0; i < newParent.children.Count; i++) {
+            if (newParent.children[i] == newPrev) {
+                newParent.children.Insert(i + 1, entry);
+                break;
+            }
+        }
+        entry.parent.children.Remove(entry);
+        entry.parent = newParent;
+        UpdateHierarchy();
+    }
 }
 }
