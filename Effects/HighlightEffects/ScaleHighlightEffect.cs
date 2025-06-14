@@ -15,7 +15,7 @@ namespace BubbleZun.Effects.HighlightEffects
         {
             if (targetTransform == null) targetTransform = transform;
             originalScale = targetTransform.localScale;
-            tweenName = tweenName + "_" + gameObject.name;
+            tweenName = tweenName + "_" + gameObject.GetInstanceID();
         }
 
         public void Highlight()
