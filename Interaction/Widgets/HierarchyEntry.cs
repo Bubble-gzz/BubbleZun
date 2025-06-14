@@ -49,7 +49,7 @@ public class HierarchyEntry : MonoBehaviour
     bool lastShowState = false;
     void Update()
     {
-        Vector2 targetPos = new Vector2(hierarchy.indent * depth, y);
+        Vector2 targetPos = new Vector2(rectTransform.anchoredPosition.x, y);
         rectTransform.anchoredPosition = Vector2.Lerp(rectTransform.anchoredPosition, targetPos, Time.deltaTime * 10);
         if (lastShowState != show)
         {
@@ -130,6 +130,12 @@ public class HierarchyEntry : MonoBehaviour
         {
             expandIcon.TweenRotation(expanded ? 1 : 0);
         }
+        RectTransform rt = GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0, 1);
+        rt.anchorMax = new Vector2(1, 1);
+        DOVirtual.Float(rt.offsetMin.x, hierarchy.leftPadding + hierarchy.indent * depth, 0.2f, (x) => rt.offsetMin = new Vector2(x, rt.offsetMin.y));
+        DOVirtual.Float(rt.offsetMax.x, -hierarchy.rightPadding, 0.2f, (x) => rt.offsetMax = new Vector2(x, rt.offsetMax.y));
+        DOVirtual.Float(rt.sizeDelta.y, hierarchy.entryHeight, 0.2f, (y) => rt.sizeDelta = new Vector2(rt.sizeDelta.x, y));
     }
     bool isDragging = false;
     public void DragStart()

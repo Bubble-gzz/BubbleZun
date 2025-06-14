@@ -8,8 +8,10 @@ namespace BubbleZun.Interaction
 public class Hierarchy : MonoBehaviour
 {
     // Start is called before the first frame update
-    public float indent;
-    public float spacing;
+    public float indent = 20;
+    public float spacing = 35;
+    public float leftPadding = 10, rightPadding = 10;
+    public float entryHeight = 30;
     public List<HierarchyEntry> entries = new List<HierarchyEntry>();
     public HierarchyEntry root;
     public GameObject entryPrefab;
@@ -18,10 +20,11 @@ public class Hierarchy : MonoBehaviour
     public UnityEvent onHierarchyChanged = new UnityEvent();
     void Start()
     {
+        /*
         CreateEntry(null, "Root", null);
         CreateEntry(root, "Loop1", null);
         CreateEntry(root, "Loop2", null);
-
+*/
     }
 
     // Update is called once per frame
@@ -71,11 +74,10 @@ public class Hierarchy : MonoBehaviour
         newEntry.expanded = false;
         Debug.Log("CreateEntry: " + newEntry.id);
 
-        RectTransform rectTransform = newEntry.GetComponent<RectTransform>();
-        rectTransform.anchorMin = new Vector2(0, 1);
-        rectTransform.anchorMax = new Vector2(1, 1);
+        RectTransform rt = newEntry.GetComponent<RectTransform>();
+
         if (parent != null) {
-            rectTransform.anchoredPosition = parent.GetComponent<RectTransform>().anchoredPosition;
+            rt.anchoredPosition = parent.GetComponent<RectTransform>().anchoredPosition;
         }
 
         if (parent == null) root = newEntry;
