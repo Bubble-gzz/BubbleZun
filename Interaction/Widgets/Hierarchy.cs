@@ -45,11 +45,12 @@ public class Hierarchy : MonoBehaviour
         entries.Add(entry);
         entry.SetVisibility(show);
         entry.UpdateUI();
-        if (lastEntry != null) lastEntry.next = entry;
 
         if (show)
         {
+            if (lastEntry != null) lastEntry.next = entry;
             entry.prev = lastEntry;
+            entry.next = null;
             entry.y = lastEntry == null ? 0 : lastEntry.y - spacing;
             lastEntry = entry;
         }
@@ -123,15 +124,27 @@ public class Hierarchy : MonoBehaviour
     {
         if (newPrev == null) return;
         if (newPrev.IsChildOf(entry)) return;
-        HierarchyEntry newParent = newPrev.parent;
-        for (int i = 0; i < newParent.children.Count; i++) {
-            if (newParent.children[i] == newPrev) {
-                newParent.children.Insert(i + 1, entry);
-                break;
+        HierarchyEntry nextEntry = newPrev.next;
+        HierarchyEntry newParent = null;
+        
+        entry.parent.children.Remove(entry);
+
+        if (nextEntry != null && nextEntry.IsChildOf(newPrev))
+        {
+            newParent = newPrev;
+            newParent.children.Insert(0, entry);
+        }
+        else {
+            newParent = newPrev.parent;
+            for (int i = 0; i < newParent.children.Count; i++) {
+                if (newParent.children[i] == newPrev) {
+                    newParent.children.Insert(i + 1, entry);
+                    break;
+                }
             }
         }
-        entry.parent.children.Remove(entry);
         entry.parent = newParent;
+
         UpdateHierarchy();
     }
 }
