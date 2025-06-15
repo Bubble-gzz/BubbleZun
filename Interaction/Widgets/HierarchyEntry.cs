@@ -152,5 +152,14 @@ public class HierarchyEntry : MonoBehaviour
         }
         return false;
     }
+    public void Delete()
+    {
+        Debug.Log("Delete HierarchyEntry: " + id);
+        foreach (var child in children) child.Delete();
+        if (parent != null) parent.children.Remove(this);
+        if (hierarchy.root == this) hierarchy.root = null;
+        hierarchy.UpdateHierarchy();
+        Destroy(gameObject);
+    }
 }
 }
