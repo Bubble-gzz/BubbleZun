@@ -8,7 +8,7 @@ namespace BubbleZun.Interaction{
     public class MouseDetector : MouseInteractable, IPointerEnterHandler, IPointerExitHandler
     {
 
-        [HideInInspector] public bool isMouseOver = false;
+        public bool isMouseOver = false;
 
         List<IHighlightEffect> highlightEffects = new List<IHighlightEffect>();
         RectTransform rectTransform;
