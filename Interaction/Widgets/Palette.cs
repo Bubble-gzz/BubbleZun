@@ -18,7 +18,7 @@ public class Palette : MonoBehaviour
         if (groupSelector == null) groupSelector = GetComponentInChildren<GroupSelector>();
         if (groupSelector == null) groupSelector = gameObject.AddComponent<GroupSelector>();
         if (contentRoot == null) contentRoot = transform;
-        groupSelector.mouseSelect = true;
+        groupSelector.defaultMouseSelect = true;
         groupSelector.contentRoot = contentRoot;
         groupSelector.onSelect.AddListener(OnSelectSwatch);
         foreach (Transform child in contentRoot)
