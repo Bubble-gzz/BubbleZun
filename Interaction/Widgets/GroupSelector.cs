@@ -44,9 +44,7 @@ public class GroupSelector : Interactable
         {
             twoPhases[i].TurnOff(false);
         }
-        twoPhases[0].TurnOn(false);
-        selected[0] = true;
-        currentIndex = 0;
+        Select(0);
     }
     public void Select(int index)
     {
