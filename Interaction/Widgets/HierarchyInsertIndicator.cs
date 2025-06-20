@@ -45,9 +45,9 @@ public class HierarchyInsertIndicator : MonoBehaviour
         List<HierarchyEntry> entries = hierarchy.entries;
         for (int i = 0; i < entries.Count; i++) {
             HierarchyEntry entry = entries[i];
-            string debugLog = "entry._y: " + entry._y + " insertPos: " + insertPos + " spacing: " + hierarchy.spacing;
-            if (entry.next != null) debugLog += " next._y: " + entry.next._y;
-            Debug.Log(debugLog);
+            //string debugLog = "entry._y: " + entry._y + " insertPos: " + insertPos + " spacing: " + hierarchy.spacing;
+            //if (entry.next != null) debugLog += " next._y: " + entry.next._y;
+            //Debug.Log(debugLog);
             if (Mathf.Abs(entry._y - insertPos) < hierarchy.spacing * 0.3f) {
                 InsertEntry = entry;
                 InsertAfter = false;
