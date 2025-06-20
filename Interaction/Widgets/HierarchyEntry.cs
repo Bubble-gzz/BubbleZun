@@ -154,13 +154,13 @@ public class HierarchyEntry : MonoBehaviour
     }
     public void Delete()
     {
-        Debug.Log("Delete HierarchyEntry: " + id);
+        //Debug.Log("Delete HierarchyEntry: " + id);
         List<HierarchyEntry> children = new List<HierarchyEntry>(this.children);
         foreach (var child in children) child.Delete();
         if (parent != null) parent.children.Remove(this);
         if (hierarchy.root == this) hierarchy.root = null;
         hierarchy.UpdateHierarchy();
-        Debug.Log("Destroy HierarchyEntry: " + id);
+        //Debug.Log("Destroy HierarchyEntry: " + id);
         Destroy(gameObject);
     }
 }
