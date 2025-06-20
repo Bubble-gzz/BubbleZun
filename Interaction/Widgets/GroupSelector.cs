@@ -32,6 +32,7 @@ public class GroupSelector : Interactable
             if (defaultMouseSelect)
             {
                 MouseClickDetector clickDetector = child.GetComponent<MouseClickDetector>();
+                if (clickDetector == null) clickDetector = child.gameObject.AddComponent<MouseClickDetector>();
                 if (clickDetector != null)
                 {
                     clickDetector.onLMBClick.AddListener(() => Select(twoPhases.IndexOf(twoPhase)));
