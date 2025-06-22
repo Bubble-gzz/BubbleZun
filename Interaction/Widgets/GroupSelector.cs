@@ -52,7 +52,7 @@ public class GroupSelector : Interactable
     }
     void Select(int index, bool animated = true)
     {
-        BDebug.Log("Select: " + index);
+        //BDebug.Log("Select: " + index);
         if (interactionObject != null && !interactionObject.IsInteractable()) {
             BDebug.Log("Not interactable");
             return;
@@ -84,7 +84,7 @@ public class GroupSelector : Interactable
     }
     void TurnOn(int index, bool animated = true)
     {
-        BDebug.Log("TurnOn: " + index);
+        //BDebug.Log("TurnOn: " + index);
         if (index < 0 || index >= twoPhases.Count) return;
         twoPhases[index].TurnOn(animated);
         selected[index] = true;
@@ -92,7 +92,7 @@ public class GroupSelector : Interactable
     }
     void TurnOff(int index, bool animated = true)
     {
-        BDebug.Log("TurnOff: " + index);
+        //BDebug.Log("TurnOff: " + index);
         if (index < 0 || index >= twoPhases.Count) return;
         twoPhases[index].TurnOff(animated);
         selected[index] = false;

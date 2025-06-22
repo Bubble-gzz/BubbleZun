@@ -72,7 +72,7 @@ public class Hierarchy : MonoBehaviour
         newEntry.hierarchy = this;
         newEntry.bindObject = bindObject;
         newEntry.expanded = false;
-        Debug.Log("CreateEntry: " + newEntry.id);
+        //Debug.Log("CreateEntry: " + newEntry.id);
 
         RectTransform rt = newEntry.GetComponent<RectTransform>();
 
