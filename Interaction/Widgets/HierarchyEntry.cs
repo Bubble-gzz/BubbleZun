@@ -21,6 +21,7 @@ public class HierarchyEntry : MonoBehaviour
     public HierarchyEntry prev, next;
     public List<HierarchyEntry> children = new List<HierarchyEntry>();
     public bool hasChildren => children.Count > 0;
+    public bool isRoot => hierarchy?.root == this;
     InteractionObject interactionObject;
 
     TweenAlphaEffect alphaEffect;
