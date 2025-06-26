@@ -13,6 +13,7 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
     public bool isOn = false;
     public UnityEvent onTurnOn = new UnityEvent();
     public UnityEvent onTurnOff = new UnityEvent();
+    public UnityEvent<bool> onStateChange = new UnityEvent<bool>();
     public List<IHighlightEffect> animatedEffects = new List<IHighlightEffect>();
     public bool ignoreRepeatedTrigger = true;
     public bool autoInitState{get; set;} = true;
@@ -37,12 +38,18 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
         if (isOn) TurnOff();
         else TurnOn();
     }
+    public void SetState(bool state, bool animated = true)
+    {
+        if (state) TurnOn(animated);
+        else TurnOff(animated);
+    }
     public void TurnOn(bool animated = true)
     {
         //if (interactionObject != null && !interactionObject.IsInteractable()) return;
         if (ignoreRepeatedTrigger && isOn) return;
         isOn = true;
         onTurnOn.Invoke();
+        onStateChange.Invoke(true);
         BDebug.Log("[" + gameObject.name + "] TurnOn");
         if (animated)
         {
@@ -58,6 +65,7 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
         if (ignoreRepeatedTrigger && !isOn) return;
         isOn = false;
         onTurnOff.Invoke();
+        onStateChange.Invoke(false);
         BDebug.Log("[" + gameObject.name + "] TurnOff");
         if (animated)
         {
