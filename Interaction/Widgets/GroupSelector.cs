@@ -8,6 +8,7 @@ namespace BubbleZun.Interaction
 {
 public interface ITwoPhase{
     bool autoInitState{get; set;}
+    bool state{get;}
     void TurnOn(bool animated = true);
     void TurnOff(bool animated = true);
 }
@@ -42,7 +43,7 @@ public class GroupSelector : Interactable
                     clickDetector.onLMBClick.AddListener(() => Select(twoPhases.IndexOf(twoPhase)));
                 }
             }
-            selected.Add(false);
+            selected.Add(twoPhase.state);
         }
         Select(defaultIndex);
     }

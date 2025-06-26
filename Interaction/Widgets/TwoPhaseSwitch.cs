@@ -10,6 +10,7 @@ namespace BubbleZun.Interaction
 public class TwoPhaseSwitch : Interactable, ITwoPhase
 {
     // Start is called before the first frame update
+    public bool state{get => isOn;}
     public bool isOn = false;
     public UnityEvent onTurnOn = new UnityEvent();
     public UnityEvent onTurnOff = new UnityEvent();

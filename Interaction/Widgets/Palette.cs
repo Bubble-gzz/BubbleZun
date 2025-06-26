@@ -6,21 +6,15 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 public class Palette : MonoBehaviour
 {
-    public GroupSelector groupSelector;
     public ColorPicker colorPicker;
     public Transform contentRoot;
     List<Image> patchImage = new List<Image>();
     public UnityEvent onChangeColor;
-    public int currentColorIndex => groupSelector.currentIndex;
+    public int currentColorIndex;
     public Color currentColor => GetColor(currentColorIndex);
     void Awake()
     {
-        if (groupSelector == null) groupSelector = GetComponentInChildren<GroupSelector>();
-        if (groupSelector == null) groupSelector = gameObject.AddComponent<GroupSelector>();
         if (contentRoot == null) contentRoot = transform;
-        groupSelector.defaultMouseSelect = true;
-        groupSelector.contentRoot = contentRoot;
-        groupSelector.onSelect.AddListener(OnSelectSwatch);
         foreach (Transform child in contentRoot)
         {
             Image image = child.GetComponent<Image>();
@@ -51,6 +45,7 @@ public class Palette : MonoBehaviour
     }
     public void OnSelectSwatch(int id)
     {
+        currentColorIndex = id;
         colorPicker.SetColor(currentColor);
     }
 }
