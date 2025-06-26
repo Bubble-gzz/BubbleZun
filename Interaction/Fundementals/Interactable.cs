@@ -35,18 +35,6 @@ namespace BubbleZun.Interaction{
         {
             if (!bindInteractionObject) return true;
             return interactionObject.IsInteractable();
-            /*bool interactable = true;
-            InteractionObject current = interactionObject;
-            while (current != null)
-            {
-                if (!current.IsInteractable()) {
-                    interactable = false;
-                    break;
-                }
-                current = current.GetParent();
-            }
-            return interactable;
-            */
         }
         protected T InstallComponent<T>(ref T component) where T : Interactable
         {

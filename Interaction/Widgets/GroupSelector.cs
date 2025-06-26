@@ -7,6 +7,7 @@ using BubbleZun.Utils;
 namespace BubbleZun.Interaction
 {
 public interface ITwoPhase{
+    bool autoInitState{get; set;}
     void TurnOn(bool animated = true);
     void TurnOff(bool animated = true);
 }
@@ -20,6 +21,8 @@ public class GroupSelector : Interactable
     public UnityEvent<int> onSelect = new UnityEvent<int>();
     public UnityEvent<int> onDeselect = new UnityEvent<int>();
     public bool defaultMouseSelect = true;
+    public int defaultIndex = 0;
+    public bool ignoreRepeatedSelect = true;
     protected override void Start()
     {
         base.Start();
@@ -28,6 +31,7 @@ public class GroupSelector : Interactable
         {
             ITwoPhase twoPhase = child.GetComponent<ITwoPhase>();
             if (twoPhase != null) twoPhases.Add(twoPhase);
+            twoPhase.autoInitState = false;
 
             if (defaultMouseSelect)
             {
@@ -40,11 +44,7 @@ public class GroupSelector : Interactable
             }
             selected.Add(false);
         }
-        for (int i = 1; i < twoPhases.Count; i++)
-        {
-            twoPhases[i].TurnOff(false);
-        }
-        Select(0);
+        Select(defaultIndex);
     }
     public void Select(int index)
     {
@@ -52,20 +52,12 @@ public class GroupSelector : Interactable
     }
     void Select(int index, bool animated = true)
     {
-        //BDebug.Log("Select: " + index);
-        if (interactionObject != null && !interactionObject.IsInteractable()) {
-            BDebug.Log("Not interactable");
-            return;
-        }
-        if (index < 0 || index >= twoPhases.Count) {
-            BDebug.Log("Index out of range");
-            return;
-        }
         for (int i = 0; i < twoPhases.Count; i++)
         {
             if (i == index) continue;
-            if (selected[i]) TurnOff(i, animated);
+            TurnOff(i, animated);
         }
+        BDebug.Log("[" + gameObject.name + "] Select: " + index);
         TurnOn(index, animated);
         currentIndex = index;
     }
@@ -84,16 +76,19 @@ public class GroupSelector : Interactable
     }
     void TurnOn(int index, bool animated = true)
     {
-        //BDebug.Log("TurnOn: " + index);
-        if (index < 0 || index >= twoPhases.Count) return;
+        if (index < 0 || index >= twoPhases.Count) {
+            BDebug.Log("Index out of range");
+            return;
+        }
+        if (ignoreRepeatedSelect && selected[index]) return;
         twoPhases[index].TurnOn(animated);
         selected[index] = true;
         onSelect.Invoke(index);
     }
     void TurnOff(int index, bool animated = true)
     {
-        //BDebug.Log("TurnOff: " + index);
         if (index < 0 || index >= twoPhases.Count) return;
+        if (ignoreRepeatedSelect && !selected[index]) return;
         twoPhases[index].TurnOff(animated);
         selected[index] = false;
         onDeselect.Invoke(index);
