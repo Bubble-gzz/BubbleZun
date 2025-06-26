@@ -10,11 +10,13 @@ namespace BubbleZun.Interaction{
 
         public bool isMouseOver = false;
 
-        List<IHighlightEffect> highlightEffects = new List<IHighlightEffect>();
+        public List<IHighlightEffect> highlightEffects = new List<IHighlightEffect>();
         RectTransform rectTransform;
         protected override void Start(){
             base.Start();
-            highlightEffects = GetComponents<IHighlightEffect>().ToList();
+            List<IHighlightEffect> effects = GetComponents<IHighlightEffect>().ToList();
+            foreach (var effect in effects)
+                if (!highlightEffects.Contains(effect)) highlightEffects.Add(effect);
             if (useScreenSpace) rectTransform = GetComponent<RectTransform>();
         }
 
