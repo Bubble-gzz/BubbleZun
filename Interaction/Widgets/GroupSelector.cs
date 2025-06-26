@@ -57,7 +57,7 @@ public class GroupSelector : Interactable
             if (i == index) continue;
             TurnOff(i, animated);
         }
-        BDebug.Log("[" + gameObject.name + "] Select: " + index);
+        //BDebug.Log("[" + gameObject.name + "] Select: " + index);
         TurnOn(index, animated);
         currentIndex = index;
     }

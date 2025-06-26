@@ -21,7 +21,6 @@ namespace BubbleZun.Effects.HighlightEffects
 
         public void Highlight()
         {
-            BDebug.Log("Highlight");
             DOTween.Kill(tweenName);
             targetTransform.DOScale(Vector3.Scale(originalScale, highlightScale * 1.05f), 0.2f).SetEase(Ease.OutBack).SetId(tweenName);
             targetTransform.DOScale(Vector3.Scale(originalScale, highlightScale), 0.1f).SetEase(Ease.Linear).SetDelay(0.2f).SetId(tweenName);
