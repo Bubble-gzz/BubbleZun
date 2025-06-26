@@ -5,6 +5,7 @@ using DG.Tweening;
 using BubbleZun.Effects.AnimationEffects;
 using UnityEngine.Events;
 using TMPro;
+using BubbleZun.Utils;
 namespace BubbleZun.Interaction
 {
 public class HierarchyEntry : MonoBehaviour
@@ -27,7 +28,6 @@ public class HierarchyEntry : MonoBehaviour
     TweenAlphaEffect alphaEffect;
     [SerializeField] TweenRotationEffect expandIcon;
     [SerializeField] TweenAlphaEffect expandIconAlpha;
-
     public string id{
         get => text.text;
         set => text.text = value;
