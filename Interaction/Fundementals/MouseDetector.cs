@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
 using BubbleZun.Effects.HighlightEffects;
+using BubbleZun.Utils;
 namespace BubbleZun.Interaction{
     public class MouseDetector : MouseInteractable, IPointerEnterHandler, IPointerExitHandler
     {
@@ -45,6 +46,7 @@ namespace BubbleZun.Interaction{
                 }
                 else {
                     onMouseExit.Invoke();
+                    BDebug.Log("[" + gameObject.name + "] OnMouseExit");
                     if (blockNonUIObject) InteractionSystem.RemoveBlockingUIElement(this);
                 }
                 isMouseOverLastFrame = isMouseOver;

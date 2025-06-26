@@ -51,7 +51,7 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
         isOn = true;
         onTurnOn.Invoke();
         onStateChange.Invoke(true);
-        BDebug.Log("[" + gameObject.name + "] TurnOn");
+        //BDebug.Log("[" + gameObject.name + "] TurnOn");
         if (animated)
         {
             foreach (var effect in animatedEffects)
@@ -67,7 +67,7 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
         isOn = false;
         onTurnOff.Invoke();
         onStateChange.Invoke(false);
-        BDebug.Log("[" + gameObject.name + "] TurnOff");
+        //BDebug.Log("[" + gameObject.name + "] TurnOff");
         if (animated)
         {
             foreach (var effect in animatedEffects)
@@ -78,8 +78,15 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
     }
     public void ReplayCurrentState(bool animated = true)
     {
-        if (isOn) TurnOn(animated);
-        else TurnOff(animated);
+        BDebug.Log("[" + gameObject.name + "] ReplayCurrentState, isOn: " + isOn);
+        if (isOn) {
+            isOn = false;
+            TurnOn(animated);
+        }
+        else {
+            isOn = true;
+            TurnOff(animated);
+        }
     }
 }
 }
