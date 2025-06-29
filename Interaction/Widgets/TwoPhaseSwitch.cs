@@ -63,7 +63,11 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
     public void TurnOff(bool animated = true)
     {
         //if (interactionObject != null && !interactionObject.IsInteractable()) return;
-        if (ignoreRepeatedTrigger && !isOn) return;
+        
+        if (ignoreRepeatedTrigger && !isOn) {
+            //BDebug.Log("[" + gameObject.name + "] TurnOff but failed");
+            return;
+        }
         isOn = false;
         onTurnOff.Invoke();
         onStateChange.Invoke(false);

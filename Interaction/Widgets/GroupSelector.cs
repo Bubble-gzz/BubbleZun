@@ -89,7 +89,10 @@ public class GroupSelector : Interactable
     void TurnOff(int index, bool animated = true)
     {
         if (index < 0 || index >= twoPhases.Count) return;
-        if (ignoreRepeatedSelect && !selected[index]) return;
+        if (ignoreRepeatedSelect && !selected[index]) {
+            BDebug.Log("[" + gameObject.name + "] TurnOff but failed");
+            return;
+        }
         twoPhases[index].TurnOff(animated);
         selected[index] = false;
         onDeselect.Invoke(index);
