@@ -9,7 +9,6 @@ namespace BubbleZun.Interaction{
     {
         public UnityEvent onLMBClick = new UnityEvent();
         public UnityEvent onRMBClick = new UnityEvent();
-        public UnityEvent onLMBDoubleClick = new UnityEvent();
         public UnityEvent OnLMBClick => onLMBClick;
         public UnityEvent OnRMBClick => onRMBClick;
         MouseDetector mouseDetector;
