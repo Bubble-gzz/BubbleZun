@@ -29,7 +29,7 @@ public class CursorTipPanel : MonoBehaviour
     {
         if (showing) {
             float targetWidth = Mathf.Max(tipText.preferredWidth + 20f, 100f);
-            rt.sizeDelta = Vector2.Lerp(rt.sizeDelta, new Vector2(targetWidth, rt.sizeDelta.y), 5f * Time.deltaTime);
+            rt.sizeDelta = Vector2.Lerp(rt.sizeDelta, new Vector2(targetWidth, rt.sizeDelta.y), 20f * Time.deltaTime);
         }
     }
     public void OnShowTip()

@@ -10,14 +10,26 @@ namespace BubbleZun.Utils{
         public static CursorTip instance;
         private void Awake()
         {
+            if (instance != null) {
+                Destroy(gameObject);
+                return;
+            }
             instance = this;
         }
         public TMP_Text tipText;
         public UnityEvent onTipShow;
         public UnityEvent onTipHide;
-        public Vector2 offset;
+        public Vector2 defaultOffset;
+        [HideInInspector] public Vector2 offset;
+        public bool updatePosAutomatically = true;
         public void Update()
         {
+            UpdatePos();
+
+        }
+        void UpdatePos()
+        {
+            if (!updatePosAutomatically) return;
             Vector2 mousePos = Input.mousePosition;
             Vector2 targetPos = mousePos + offset;
             transform.position = Vector2.Lerp(transform.position, targetPos, 20f * Time.deltaTime);
@@ -28,7 +40,15 @@ namespace BubbleZun.Utils{
                 Debug.Log("CursorTip instance is null");
                 return;
             }
-            instance.showTip(text, id);
+            ShowTip(text, id, instance.defaultOffset);
+        }
+        static public void ShowTip(string text, string id, Vector2 offset)
+        {
+            if (instance == null) {
+                Debug.Log("CursorTip instance is null");
+                return;
+            }
+            instance.showTip(text, id, offset);
         }
         static public void HideTip(string id)
         {
@@ -39,8 +59,9 @@ namespace BubbleZun.Utils{
             instance.hideTip(id);
         }
         bool isShowing = false;
-        void showTip(string text, string id)
+        void showTip(string text, string id, Vector2 offset)
         {
+            this.offset = offset;
             if (text == tipText.text && isShowing) return;
             isShowing = true;
             tipText.text = text;
