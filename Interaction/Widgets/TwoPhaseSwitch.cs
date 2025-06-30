@@ -17,7 +17,8 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
     public UnityEvent<bool> onStateChange = new UnityEvent<bool>();
     public List<IHighlightEffect> animatedEffects = new List<IHighlightEffect>();
     public bool ignoreRepeatedTrigger = true;
-    public bool autoInitState{get; set;} = true;
+    public bool _autoInitState = true;
+    public bool autoInitState{get{return _autoInitState;} set{_autoInitState = value;}}
     protected override void Start()
     {
         base.Start();
