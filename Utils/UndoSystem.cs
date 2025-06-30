@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace BubbleZun.Utils{
-    public class UndoSystem : MonoBehaviour
+    public class UndoSystem
     {
-        // Start is called before the first frame update
         int stepID = 0;
-        int capacity = 100;
+        int capacity;
         LinkedList<Operation> historyStack = new LinkedList<Operation>();
         Stack<Operation> redoStack = new Stack<Operation>();
+        public UndoSystem(int capacity = 100) {
+            this.capacity = capacity;
+        }
         public void Register(Operation operation, bool newStep = true)
         {
             if (newStep) stepID++;
@@ -53,8 +55,10 @@ namespace BubbleZun.Utils{
     public abstract class Operation{
         public int stepID;
         public string description;
+        public Operation(string description) {
+            this.description = description;
+        }
         public abstract void Undo();
         public abstract void Redo();
-        public abstract void GetDescription();
     }
 }

@@ -36,7 +36,6 @@ public class CursorTipPanel : MonoBehaviour
     {
         if (showing == false)
         {
-            BDebug.Log("OnShowTip");
             tweenPos.TweenPos(1);
             tweenAlpha.TweenAlpha(1);
             showing = true;
@@ -48,7 +47,6 @@ public class CursorTipPanel : MonoBehaviour
     public void OnHideTip()
     {
         if (showing == false) return;
-        BDebug.Log("OnHideTip");
         showing = false;
         tweenPos.TweenPos(0);
         tweenAlpha.TweenAlpha(0);

@@ -17,8 +17,7 @@ namespace BubbleZun.Utils{
         public void TriggerTip(int index)
         {
             if (index < 0 || index >= tips.Count) return;
-            BDebug.Log("TriggerTip " + tips[index].text);
-
+        
             if (tips[index].useDefaultOffset)
             {
                 CursorTip.ShowTip(tips[index].text, id);

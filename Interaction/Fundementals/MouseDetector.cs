@@ -27,7 +27,6 @@ namespace BubbleZun.Interaction{
         protected override void Update()
         {
             base.Update();
-            //if (name == "SettingIcon") Debug.Log("[Time: " + Time.time + "] currentFocusedObject: " + InteractionSystem.Instance.currentFocusedObject);
             if (!IsAreaActive()) isMouseOver = false;
             else {
                 if (transparent) TransparentAreaCheck();
@@ -46,7 +45,6 @@ namespace BubbleZun.Interaction{
                 }
                 else {
                     onMouseExit.Invoke();
-                    BDebug.Log("[" + gameObject.name + "] OnMouseExit");
                     if (blockNonUIObject) InteractionSystem.RemoveBlockingUIElement(this);
                 }
                 isMouseOverLastFrame = isMouseOver;
