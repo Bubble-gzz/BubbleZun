@@ -10,7 +10,7 @@ namespace BubbleZun.Utils{
         int capacity = 100;
         LinkedList<Operation> historyStack = new LinkedList<Operation>();
         Stack<Operation> redoStack = new Stack<Operation>();
-        public void AddOperation(Operation operation, bool newStep = true)
+        public void Register(Operation operation, bool newStep = true)
         {
             if (newStep) stepID++;
             operation.stepID = stepID;
