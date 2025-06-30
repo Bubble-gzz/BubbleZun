@@ -15,14 +15,12 @@ namespace BubbleZun.Effects.AnimationEffects
         SpriteRenderer spriteRenderer;
         Image image;
         TextMeshProUGUI textMeshProUGUI;
-        AlphaController alphaController;
         string tweenName = "TweenColor_";
         void Awake()
         {
             if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
             if (image == null) image = GetComponent<Image>();
             if (textMeshProUGUI == null) textMeshProUGUI = GetComponent<TextMeshProUGUI>();
-            alphaController = GetComponent<AlphaController>();
             tweenName += gameObject.GetInstanceID();
         }
         void Start()
@@ -35,32 +33,24 @@ namespace BubbleZun.Effects.AnimationEffects
         {
             
         }
-        void CheckAlphaController(){
-            if (alphaController == null) alphaController = GetComponent<AlphaController>();
-        }
         public void TweenColor(int index)
         {
             Color targetColor = colors[index];
             float duration = durations[index];
-            CheckAlphaController();
-//            if (alphaController != null) targetColor.a = 0;
-            //Debug.Log("["+Time.time+"] TweenColor: " + index + " in " + duration + "s");
-            // 只处理RGB，保持Alpha不变
-            Color rgbOnly = targetColor;
             DOTween.Kill(tweenName);
             if (spriteRenderer != null)
             {
-                spriteRenderer.DOColor(rgbOnly, duration).SetId(tweenName);
+                spriteRenderer.DOColor(targetColor, duration).SetId(tweenName);
             }
             
             if (image != null)
             {
-                image.DOColor(rgbOnly, duration).SetId(tweenName);
+                image.DOColor(targetColor, duration).SetId(tweenName);
             }
             
             if (textMeshProUGUI != null)
             {
-                textMeshProUGUI.DOColor(rgbOnly, duration).SetId(tweenName);
+                textMeshProUGUI.DOColor(targetColor, duration).SetId(tweenName);
             }
         }
     }
