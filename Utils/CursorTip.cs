@@ -19,7 +19,8 @@ namespace BubbleZun.Utils{
         public void Update()
         {
             Vector2 mousePos = Input.mousePosition;
-            transform.position = mousePos + offset;
+            Vector2 targetPos = mousePos + offset;
+            transform.position = Vector2.Lerp(transform.position, targetPos, 20f * Time.deltaTime);
         }
         static public void ShowTip(string text, string id)
         {
