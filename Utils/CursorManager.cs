@@ -36,7 +36,7 @@ namespace BubbleZun.Utils
             public Vector2 size;
         }
         public List<CursorInfo> cursorInfos = new List<CursorInfo>();
-        private GameObject canvasObj, cursorObj;
+        public GameObject canvasObj, cursorObj;
         private Image cursorImage;
         private Canvas cursorCanvas;
         CursorInfo currentCursorInfo;
@@ -73,21 +73,24 @@ namespace BubbleZun.Utils
         private void InitializeCursorSprite()
         {
             // 创建 Canvas
-            canvasObj = new GameObject("CursorCanvas");
-            cursorCanvas = canvasObj.AddComponent<Canvas>();
-            cursorCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            cursorCanvas.sortingOrder = 100;
-            
-            // 添加 CanvasScaler
-            CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920, 1080);
-            
-            // 创建光标
-            cursorObj = new GameObject("CursorSprite");
-            cursorObj.transform.SetParent(canvasObj.transform, false);
-            cursorImage = cursorObj.AddComponent<Image>();
-            cursorImage.raycastTarget = false;
+            if (canvasObj == null)
+            {
+                canvasObj = new GameObject("CursorCanvas");
+                cursorCanvas = canvasObj.AddComponent<Canvas>();
+                cursorCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                cursorCanvas.sortingOrder = 100;
+                
+                CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
+                scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                scaler.referenceResolution = new Vector2(1920, 1080);
+            }
+            if (cursorObj == null)
+            {
+                cursorObj = new GameObject("CursorSprite");
+                cursorObj.transform.SetParent(canvasObj.transform, false);
+                cursorImage = cursorObj.AddComponent<Image>();
+                cursorImage.raycastTarget = false;
+            }
             DontDestroyOnLoad(canvasObj);
         }
 

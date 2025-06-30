@@ -90,7 +90,7 @@ public class GroupSelector : Interactable
     {
         if (index < 0 || index >= twoPhases.Count) return;
         if (ignoreRepeatedSelect && !selected[index]) {
-            BDebug.Log("[" + gameObject.name + "] TurnOff but failed");
+            //BDebug.Log("[" + gameObject.name + "] TurnOff but failed");
             return;
         }
         twoPhases[index].TurnOff(animated);
