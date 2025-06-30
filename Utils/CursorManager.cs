@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using DG.Tweening;
 
 namespace BubbleZun.Utils
 {
@@ -75,7 +76,7 @@ namespace BubbleZun.Utils
             canvasObj = new GameObject("CursorCanvas");
             cursorCanvas = canvasObj.AddComponent<Canvas>();
             cursorCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            cursorCanvas.sortingOrder = 2;
+            cursorCanvas.sortingOrder = 100;
             
             // 添加 CanvasScaler
             CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
@@ -131,9 +132,28 @@ namespace BubbleZun.Utils
             rectTransform.sizeDelta = currentCursorInfo.size;
         }
 
+        string scaleTweenName = "CursorScale";
+        float minScale = 0.75f;
+        float currentScale = 1f;
         private void Update()
         {
             UpdateCursorPos();
+            Cursor.visible = false;
+            if (Input.GetMouseButton(0)) {
+                if (DOTween.IsTweening(scaleTweenName)) {
+                    DOTween.Kill(scaleTweenName);
+                }
+                currentScale = Mathf.Lerp(currentScale, minScale, Time.deltaTime * 30f);
+            }
+            else {
+                if (currentScale < 1f) {
+                    currentScale = Mathf.Lerp(currentScale, 1f, Time.deltaTime * 30f);
+                    if (currentScale > 0.99f) {
+                        currentScale = 1f;
+                    }
+                }
+            }
+            cursorObj.transform.localScale = new Vector3(currentScale, currentScale, 1f);
         }
 
         void UpdateCursorPos()
