@@ -13,8 +13,7 @@ namespace BubbleZun.Interaction{
         public UnityEvent OnLMBClick => onLMBClick;
         public UnityEvent OnRMBClick => onRMBClick;
         MouseDetector mouseDetector;
-    
-        double lastClickTime = 0;
+
         public override void GenerateComponents(){
             if (generateComponentsDone) return;
             base.GenerateComponents();
@@ -27,15 +26,7 @@ namespace BubbleZun.Interaction{
             if (!IsInteractable()) return;
             if (!mouseDetector.isMouseOver) return;
             if (Input.GetMouseButtonDown(0)) {
-                if (Time.time - lastClickTime < 0.2f) {
-                    onLMBDoubleClick.Invoke();
-                    lastClickTime = 0;
-                }
-                else {
-                    lastClickTime = Time.time;
-                    Debug.Log("[" + Time.time + "] LMBClick");
-                    onLMBClick.Invoke();
-                }
+                onLMBClick.Invoke();
                 if (interactionObject != null) {
                     if (claimFocusOnInteraction) interactionObject.ClaimFocus();
                 }
