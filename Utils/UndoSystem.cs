@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace BubbleZun.Utils{
@@ -28,11 +29,13 @@ namespace BubbleZun.Utils{
             if (historyStack.Count == 0) return;
             int stepID = historyStack.Last.Value.stepID;
             string description = historyStack.Last.Value.description;
+            bool mute = false;
             do
             {
                 Operation operation = historyStack.Last.Value;
                 historyStack.RemoveLast();
-                operation.Undo();
+                operation.Undo(mute);
+                mute = true;
                 redoStack.Push(operation);
             } while (historyStack.Count > 0 && historyStack.Last.Value.stepID == stepID);
             //Debug.Log("Undo Group: " + description);
@@ -42,11 +45,13 @@ namespace BubbleZun.Utils{
             if (redoStack.Count == 0) return;
             int stepID = redoStack.Peek().stepID;
             string description = redoStack.Peek().description;
+            bool mute = false;
             do
             {
                 Operation operation = redoStack.Pop();
-                operation.Redo();
+                operation.Redo(mute);
                 historyStack.AddLast(operation);
+                mute = true;
             } while (redoStack.Count > 0 && redoStack.Peek().stepID == stepID);
             //Debug.Log("Redo Group: " + description);
         }
@@ -58,7 +63,7 @@ namespace BubbleZun.Utils{
         public Operation(string description) {
             this.description = description;
         }
-        public abstract void Undo();
-        public abstract void Redo();
+        public abstract void Undo(bool mute = false);
+        public abstract void Redo(bool mute = false);
     }
 }
