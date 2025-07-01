@@ -35,7 +35,7 @@ namespace BubbleZun.Utils{
                 operation.Undo();
                 redoStack.Push(operation);
             } while (historyStack.Count > 0 && historyStack.Last.Value.stepID == stepID);
-            Debug.Log("Undo: " + description);
+            Debug.Log("Undo Group: " + description);
         }
         public void Redo()
         {
@@ -48,7 +48,7 @@ namespace BubbleZun.Utils{
                 operation.Redo();
                 historyStack.AddLast(operation);
             } while (redoStack.Count > 0 && redoStack.Peek().stepID == stepID);
-            Debug.Log("Redo: " + description);
+            Debug.Log("Redo Group: " + description);
         }
 
     }
