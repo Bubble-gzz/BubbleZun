@@ -22,6 +22,9 @@ public class CursorTipPanel : MonoBehaviour
         if (tweenPos == null) tweenPos = GetComponent<TweenPositionEffect>();
         if (tweenAlpha == null) tweenAlpha = GetComponent<TweenAlphaEffect>();
         if (flashEffect == null) flashEffect = GetComponent<FlashEffect>();
+    }
+    void Start()
+    {
         tweenPos.SetPos(0);
         tweenAlpha.SetAlpha(0);
     }

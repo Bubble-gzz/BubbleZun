@@ -15,11 +15,9 @@ namespace BubbleZun.Effects.AnimationEffects
         string tweenName = "TweenPosition_";
         void Awake()
         {
+            Debug.Log("TweenPosEffet Awake, Parent: " + transform.parent.name);
             useScreenSpace = GetComponentInParent<Canvas>() != null;
-            if (useScreenSpace)
-            {
-                rectTransform = GetComponent<RectTransform>();
-            }
+            rectTransform = GetComponent<RectTransform>();
             tweenName += gameObject.GetInstanceID();
         }
         
@@ -46,12 +44,17 @@ namespace BubbleZun.Effects.AnimationEffects
             DOTween.Kill(tweenName);
             if (useScreenSpace)
             {
+                //Debug.Log("SetPos (screen space) for " + gameObject.name + ": " + positions[index] + " " + rectTransform.anchoredPosition);
                 rectTransform.anchoredPosition = positions[index];
+               // Debug.Log("anchoredPosition after set: " + rectTransform.anchoredPosition);
+          
             }
             else
             {
+               //Debug.Log("SetPos (world space) for " + gameObject.name + ": " + positions[index]);
                 Vector3 newPos = new Vector3(positions[index].x, positions[index].y, transform.position.z);
                 transform.position = newPos;
+                //Debug.Log("anchoredPosition after set: " + rectTransform.anchoredPosition);
             }
         }
     }
