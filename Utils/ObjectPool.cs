@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace BubbleZun.Utils
 {
+    public interface IObjectPoolable{
+        ObjectPool pool{get; set;}
+    }
     public class ObjectPool
     {
         GameObject prefab;
@@ -23,7 +26,7 @@ namespace BubbleZun.Utils
             if (obj == null)
             {
                 obj = GameObject.Instantiate(prefab);
-                //BDebug.Log("Pool drained, Instantiate " + obj.name);
+                obj.GetComponent<IObjectPoolable>().pool = this;
             }
             obj.transform.SetParent(parent);
             obj.SetActive(true);
