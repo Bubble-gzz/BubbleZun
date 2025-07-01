@@ -23,7 +23,7 @@ namespace BubbleZun.Utils
             if (obj == null)
             {
                 obj = GameObject.Instantiate(prefab);
-                BDebug.Log("Pool drained, Instantiate " + obj.name);
+                //BDebug.Log("Pool drained, Instantiate " + obj.name);
             }
             obj.transform.SetParent(parent);
             obj.SetActive(true);
