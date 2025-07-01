@@ -142,6 +142,12 @@ namespace BubbleZun.Utils
         {
             UpdateCursorPos();
             Cursor.visible = false;
+            if (Input.GetMouseButtonDown(0)) {
+                AudioManager.Play("MouseDown", "Cursor");
+            }
+            if (Input.GetMouseButtonUp(0)) {
+                AudioManager.Play("MouseUp", "Cursor");
+            }
             if (Input.GetMouseButton(0)) {
                 if (DOTween.IsTweening(scaleTweenName)) {
                     DOTween.Kill(scaleTweenName);

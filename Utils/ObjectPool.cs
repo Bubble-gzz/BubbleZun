@@ -26,7 +26,8 @@ namespace BubbleZun.Utils
             if (obj == null)
             {
                 obj = GameObject.Instantiate(prefab);
-                obj.GetComponent<IObjectPoolable>().pool = this;
+                IObjectPoolable poolable = obj.GetComponent<IObjectPoolable>();
+                if (poolable != null) poolable.pool = this;
             }
             obj.transform.SetParent(parent);
             obj.SetActive(true);

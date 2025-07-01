@@ -5,7 +5,7 @@ namespace BubbleZun.Utils{
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
-    GameObject audioClipPlayerPrefab;
+    public GameObject audioClipPlayerPrefab;
     ObjectPool audioClipPlayerPool;
     [System.Serializable]
     public class AudioClipInfo{
@@ -13,6 +13,7 @@ public class AudioManager : MonoBehaviour
         public AudioClip clip;
     }
     public List<AudioClipInfo> audioClips = new List<AudioClipInfo>();
+    public Dictionary<string, AudioClipPlayer> audioClipPlayers = new Dictionary<string, AudioClipPlayer>();
     float volume = 1f;
     void Awake()
     {
@@ -24,6 +25,18 @@ public class AudioManager : MonoBehaviour
     public static void PlayOneShot(string name)
     {
         instance._playOneShot(name);
+    }
+    public static void Play(string name, string playerID = "default")
+    {
+        instance._play(name, playerID);
+    }
+    public void _play(string name, string playerID = "default")
+    {
+        if (!audioClipPlayers.ContainsKey(playerID))
+        {
+            audioClipPlayers[playerID] = audioClipPlayerPool.GetObject(transform).GetComponent<AudioClipPlayer>();
+        }
+        audioClipPlayers[playerID].Play(audioClips.Find(clip => clip.name == name).clip, volume);
     }
     public void _playOneShot(string name, float volume = 1f)
     {

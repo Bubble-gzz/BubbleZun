@@ -11,6 +11,11 @@ namespace BubbleZun.Utils{
         public void PlayOneShot(AudioClip clip, float volume = 1f){
             StartCoroutine(PlayOneShotCoroutine(clip, volume));
         }
+        public void Play(AudioClip clip, float volume = 1f){
+            audioSource.clip = clip;
+            audioSource.volume = volume;
+            audioSource.Play();
+        }
         IEnumerator PlayOneShotCoroutine(AudioClip clip, float volume){
             audioSource.PlayOneShot(clip, volume);
             yield return new WaitForSeconds(clip.length);
