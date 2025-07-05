@@ -17,7 +17,11 @@ public class AudioManager : MonoBehaviour
     float volume = 1f;
     void Awake()
     {
-        if (instance != null) Destroy(gameObject);
+        if (instance != null) {
+            Destroy(gameObject);
+            Debug.Log("AudioManager already exists, destroying new one");
+            return;
+        }
         instance = this;
         audioClipPlayerPool = new ObjectPool(audioClipPlayerPrefab);
         DontDestroyOnLoad(gameObject);
