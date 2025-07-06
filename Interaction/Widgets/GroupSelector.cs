@@ -31,7 +31,8 @@ public class GroupSelector : Interactable
         foreach (Transform child in contentRoot)
         {
             ITwoPhase twoPhase = child.GetComponent<ITwoPhase>();
-            if (twoPhase != null) twoPhases.Add(twoPhase);
+            if (twoPhase == null) continue;
+            twoPhases.Add(twoPhase);
             twoPhase.autoInitState = false;
 
             if (defaultMouseSelect)
