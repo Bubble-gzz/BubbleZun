@@ -83,7 +83,6 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
     }
     public void ReplayCurrentState(bool animated = true)
     {
-        BDebug.Log("[" + gameObject.name + "] ReplayCurrentState, isOn: " + isOn);
         if (isOn) {
             isOn = false;
             TurnOn(animated);
