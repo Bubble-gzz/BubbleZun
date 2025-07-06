@@ -17,6 +17,7 @@ namespace BubbleZun.Utils{
             instance = this;
         }
         public TMP_Text tipText;
+        public int priority = 0;
         public UnityEvent onTipShow;
         public UnityEvent onTipHide;
         public Vector2 defaultOffset;
@@ -25,7 +26,6 @@ namespace BubbleZun.Utils{
         public void Update()
         {
             UpdatePos();
-
         }
         void UpdatePos()
         {
@@ -34,21 +34,21 @@ namespace BubbleZun.Utils{
             Vector2 targetPos = mousePos + offset;
             transform.position = Vector2.Lerp(transform.position, targetPos, 20f * Time.deltaTime);
         }
-        static public void ShowTip(string text, string id)
+        static public void ShowTip(string text, string id, int priority = 0)
         {
             if (instance == null) {
                 Debug.Log("CursorTip instance is null");
                 return;
             }
-            ShowTip(text, id, instance.defaultOffset);
+            ShowTip(text, id, instance.defaultOffset, priority);
         }
-        static public void ShowTip(string text, string id, Vector2 offset)
+        static public void ShowTip(string text, string id, Vector2 offset, int priority = 0)
         {
             if (instance == null) {
                 Debug.Log("CursorTip instance is null");
                 return;
             }
-            instance.showTip(text, id, offset);
+            instance.showTip(text, id, offset, priority);
         }
         static public void HideTip(string id)
         {
@@ -59,13 +59,18 @@ namespace BubbleZun.Utils{
             instance.hideTip(id);
         }
         bool isShowing = false;
-        void showTip(string text, string id, Vector2 offset)
+        void showTip(string text, string id, Vector2 offset, int priority = 0)
         {
             this.offset = offset;
-            if (text == tipText.text && isShowing) return;
+            if (isShowing)
+            {
+                if (text == tipText.text) return;
+                if (priority < this.priority) return;
+            }
             isShowing = true;
             tipText.text = text;
             currentId = id;
+            this.priority = priority;
             onTipShow.Invoke();
         }
         void hideTip(string id)
