@@ -61,12 +61,7 @@ public class HierarchyEntry : MonoBehaviour
             }
             lastShowState = show;
         }
-        if (isDragging) {
-            if (Input.GetMouseButtonUp(0)) {
-                isDragging = false;
-                hierarchy.currentDraggingEntry = null;
-            }
-        }
+        UpdateDragState();
     }
     public void SetVisibility(bool visible)
     {
@@ -139,7 +134,39 @@ public class HierarchyEntry : MonoBehaviour
         DOVirtual.Float(rt.sizeDelta.y, hierarchy.entryHeight, 0.2f, (y) => rt.sizeDelta = new Vector2(rt.sizeDelta.x, y));
     }
     bool isDragging = false;
-    public void DragStart()
+    bool beforeDragStart = false;
+    float beforeDragCountdown = 0;
+    public void OnClick()
+    {
+        if (!isDragging) {
+            beforeDragStart = true;
+            beforeDragCountdown = 0.2f;
+        }
+    }
+    void UpdateDragState()
+    {
+        if (beforeDragStart)
+        {
+            if (Input.GetMouseButtonUp(0))
+            {
+                beforeDragStart = false;
+            }
+            else {
+                beforeDragCountdown -= Time.deltaTime;
+                if (beforeDragCountdown <= 0) {
+                    beforeDragStart = false;
+                    DragStart();
+                }
+            }
+        }
+        if (isDragging) {
+            if (Input.GetMouseButtonUp(0)) {
+                isDragging = false;
+                hierarchy.currentDraggingEntry = null;
+            }
+        }    
+    }
+    void DragStart()
     {
         hierarchy.currentDraggingEntry = this;
         isDragging = true;

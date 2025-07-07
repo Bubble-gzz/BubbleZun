@@ -148,9 +148,6 @@ MonoBehaviour:
   onRMBClick:
     m_PersistentCalls:
       m_Calls: []
-  onLMBDoubleClick:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &2593089939315162371
 GameObject:
   m_ObjectHideFlags: 0
@@ -274,9 +271,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   onRMBClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onLMBDoubleClick:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &316596298383324788
@@ -779,6 +773,7 @@ MonoBehaviour:
   bindInteractionObject: 1
   interactionObject: {fileID: 0}
   claimFocusOnInteraction: 1
+  isOn: 0
   onTurnOn:
     m_PersistentCalls:
       m_Calls:
@@ -811,6 +806,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onStateChange:
+    m_PersistentCalls:
+      m_Calls: []
+  ignoreRepeatedTrigger: 1
+  _autoInitState: 1
 --- !u!114 &6098849007159716026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -867,7 +867,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6098849007159716024}
         m_TargetAssemblyTypeName: BubbleZun.Interaction.HierarchyEntry, Assembly-CSharp
-        m_MethodName: DragStart
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -890,9 +890,6 @@ MonoBehaviour:
           m_BoolArgument: 1
         m_CallState: 2
   onRMBClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onLMBDoubleClick:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &6098849007159716027
@@ -945,6 +942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 795639dad5c42f7478a11a2111b10ad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Icons: {fileID: 0}
 --- !u!1 &6159721146137285634
 GameObject:
   m_ObjectHideFlags: 0
@@ -1167,8 +1165,5 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   onRMBClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onLMBDoubleClick:
     m_PersistentCalls:
       m_Calls: []
