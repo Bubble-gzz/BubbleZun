@@ -22,6 +22,7 @@ namespace BubbleZun.Interaction{
             useScreenSpace = GetComponentInParent<Canvas>() != null;
             if (!useScreenSpace) blockNonUIObject = false;
             if (detectArea == null) detectArea = GetComponent<Collider2D>();
+            if (detectUI == null) detectUI = GetComponent<Graphic>();
         }
         protected virtual void Update()
         {
