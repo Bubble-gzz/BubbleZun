@@ -28,9 +28,9 @@ public class HierarchyInsertIndicator : MonoBehaviour
         UpdateUI();
         if (Input.GetMouseButtonUp(0) && hierarchy.currentDraggingEntry != null) {
             if (InsertAfter) {
-                hierarchy.MoveAfter(hierarchy.currentDraggingEntry, InsertEntry);
+                hierarchy.MoveEntryAfter(hierarchy.currentDraggingEntry, InsertEntry);
             } else {
-                hierarchy.ChangeParent(hierarchy.currentDraggingEntry, InsertEntry);
+                hierarchy.ChangeEntryParent(hierarchy.currentDraggingEntry, InsertEntry);
             }
         }
     }

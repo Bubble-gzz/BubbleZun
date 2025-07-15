@@ -104,14 +104,8 @@ public class Hierarchy : MonoBehaviour
     {
         currentSelectedEntries.Clear();
     }
-    public void AddTestEntry()
-    {
-        if (currentSelectedEntry == null) return;
-        CreateEntry(currentSelectedEntry, "Test" + entries.Count, null);
-        UpdateHierarchy();
-    }
     public HierarchyEntry currentDraggingEntry;
-    public void ChangeParent(HierarchyEntry entry, HierarchyEntry newParent)
+    public void ChangeEntryParent(HierarchyEntry entry, HierarchyEntry newParent)
     {
         if (newParent == null) return;
         if (entry.parent == newParent) return;
@@ -122,12 +116,12 @@ public class Hierarchy : MonoBehaviour
         newParent.expanded = true;
         UpdateHierarchy();
     }
-    public void MoveAfter(HierarchyEntry entry, HierarchyEntry newPrev)
+    public void MoveEntryAfter(HierarchyEntry entry, HierarchyEntry newPrev)
     {
         if (newPrev == null) return;
         if (newPrev.IsChildOf(entry)) return;
         HierarchyEntry nextEntry = newPrev.next;
-        HierarchyEntry newParent = null;
+        HierarchyEntry newParent;
         
         entry.parent.children.Remove(entry);
 
