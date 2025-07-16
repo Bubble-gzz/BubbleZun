@@ -8,16 +8,25 @@ namespace BubbleZun.Interaction
 public class Hierarchy : MonoBehaviour
 {
     // Start is called before the first frame update
+    RectTransform rt;
+    public RectTransform content;
     public float indent = 20;
     public float spacing = 35;
     public float leftPadding = 10, rightPadding = 10;
+    public float topPadding = 10, bottomPadding = 10;
     public float entryHeight = 30;
-    public List<HierarchyEntry> entries = new List<HierarchyEntry>();
-    public HierarchyEntry root;
+    float contentHeight;
+    [HideInInspector] public List<HierarchyEntry> entries = new List<HierarchyEntry>();
+    [HideInInspector] public HierarchyEntry root;
     public GameObject entryPrefab;
-    public List<HierarchyEntry> currentSelectedEntries = new List<HierarchyEntry>();
-    public HierarchyEntry currentSelectedEntry => currentSelectedEntries.Count == 1 ? currentSelectedEntries[0] : null;
+    [HideInInspector] public List<HierarchyEntry> currentSelectedEntries = new List<HierarchyEntry>();
+    [HideInInspector] public HierarchyEntry currentSelectedEntry => currentSelectedEntries.Count == 1 ? currentSelectedEntries[0] : null;
     public UnityEvent onHierarchyChanged = new UnityEvent();
+    void Awake()
+    {
+        rt = GetComponent<RectTransform>();
+        if (content == null) content = GetComponent<RectTransform>();
+    }
     void Start()
     {
         /*
@@ -38,7 +47,10 @@ public class Hierarchy : MonoBehaviour
     {
         entries.Clear();
         lastEntry = null;
+        contentHeight = 0;
         UpdateHierarchy(root, null, 0, true);
+        contentHeight += topPadding + bottomPadding;
+        rt.sizeDelta = new Vector2(rt.sizeDelta.x, contentHeight);
         onHierarchyChanged.Invoke();
     }
     void UpdateHierarchy(HierarchyEntry entry, HierarchyEntry parent,int depth, bool show)
@@ -60,14 +72,14 @@ public class Hierarchy : MonoBehaviour
         else {
             entry.y = parent.y;
         }
-
+        contentHeight = Mathf.Max(contentHeight, - entry.y);
         foreach (HierarchyEntry child in entry.children) {
             UpdateHierarchy(child, entry, depth + 1, show & entry.expanded);
         }
     }
     public HierarchyEntry CreateEntry(HierarchyEntry parent, string id, object bindObject)
     {
-        HierarchyEntry newEntry = Instantiate(entryPrefab, transform).GetComponent<HierarchyEntry>();
+        HierarchyEntry newEntry = Instantiate(entryPrefab, content).GetComponent<HierarchyEntry>();
         newEntry.id = id;
         newEntry.hierarchy = this;
         newEntry.bindObject = bindObject;
