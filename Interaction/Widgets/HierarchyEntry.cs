@@ -187,8 +187,6 @@ public class HierarchyEntry : MonoBehaviour
         foreach (var child in children) child.Delete();
         if (parent != null) parent.children.Remove(this);
         if (hierarchy.root == this) hierarchy.root = null;
-        hierarchy.UpdateHierarchy();
-        //Debug.Log("Destroy HierarchyEntry: " + id);
         Destroy(gameObject);
     }
 }
