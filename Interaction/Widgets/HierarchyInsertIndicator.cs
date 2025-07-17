@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BubbleZun.Effects.AnimationEffects;
 using DG.Tweening;
+using BubbleZun.Utils;
 namespace BubbleZun.Interaction {
 public class HierarchyInsertIndicator : MonoBehaviour
 {   
@@ -40,10 +41,11 @@ public class HierarchyInsertIndicator : MonoBehaviour
     bool show = false;
     void UpdatePosition()
     {
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(hierarchy.transform as RectTransform, Input.mousePosition, null, out Vector2 localPoint);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(hierarchy.content, Input.mousePosition, null, out Vector2 localPoint);
         float insertPos = localPoint.y;
         List<HierarchyEntry> entries = hierarchy.entries;
         for (int i = 0; i < entries.Count; i++) {
+            BDebug.Log("insertPos" + insertPos);
             HierarchyEntry entry = entries[i];
             //string debugLog = "entry._y: " + entry._y + " insertPos: " + insertPos + " spacing: " + hierarchy.spacing;
             //if (entry.next != null) debugLog += " next._y: " + entry.next._y;

@@ -8,7 +8,7 @@ namespace BubbleZun.Interaction
 public class Hierarchy : MonoBehaviour
 {
     // Start is called before the first frame update
-    RectTransform rt;
+    public RectTransform rt;
     public RectTransform content;
     public float indent = 20;
     public float spacing = 35;
