@@ -11,9 +11,15 @@ namespace BubbleZun.Utils
     {
         GameObject prefab;
         List<GameObject> pool = new List<GameObject>();
-        public ObjectPool(GameObject prefab)
+        public ObjectPool(GameObject prefab, int initialSize = 0)
         {
             this.prefab = prefab;
+            for (int i = 0; i < initialSize; i++)
+            {
+                GameObject obj = GameObject.Instantiate(prefab);
+                obj.SetActive(false);
+                pool.Add(obj);
+            }
         }
         public GameObject GetObject(Transform parent)
         {
