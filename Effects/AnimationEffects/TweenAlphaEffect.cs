@@ -12,6 +12,14 @@ namespace BubbleZun.Effects.AnimationEffects
         public List<float> alphas = new List<float>();
         public List<float> durations = new List<float>();
         AlphaController alphaController;
+        CanvasGroup canvasGroup;
+        string tweenName = "TweenAlpha_";
+        void Awake()
+        {
+            canvasGroup = GetComponent<CanvasGroup>();
+            if (canvasGroup == null) canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            tweenName += gameObject.GetInstanceID();
+        }
         void CheckAlphaController(){
             if (alphaController == null)
             {
@@ -28,12 +36,28 @@ namespace BubbleZun.Effects.AnimationEffects
             }
         }
         public void TweenAlpha(int index){
-            CheckAlphaController();
-            alphaController.TweenAlpha(alphas[index], durations[index]);    
+            //CheckAlphaController();
+            DOTween.Kill(tweenName);
+            if (canvasGroup != null)
+            {
+                canvasGroup.DOFade(alphas[index], durations[index]).SetId(tweenName);
+            }
+            else
+            {
+                alphaController.TweenAlpha(alphas[index], durations[index]);    
+            }
         }
         public void SetAlpha(int index){
-            CheckAlphaController();
-            alphaController.SetAlpha(alphas[index]);
+            DOTween.Kill(tweenName);
+            //CheckAlphaController();
+            if (canvasGroup != null)
+            {
+                canvasGroup.alpha = alphas[index];
+            }
+            else
+            {
+                alphaController.SetAlpha(alphas[index]);
+            }
         }
     }
 }
