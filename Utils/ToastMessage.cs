@@ -40,7 +40,7 @@ namespace BubbleZun.Utils{
         {
             tweenPosEffect.SetPos(0);
             tweenAlphaEffect.SetAlpha(0);
-            Debug.Log("Awake, rt.anchoredPosition: " + rt.anchoredPosition);
+            //Debug.Log("Awake, rt.anchoredPosition: " + rt.anchoredPosition);
             PopUp(duration);
         }
 
@@ -51,7 +51,7 @@ namespace BubbleZun.Utils{
             if (timeDelta > 0.2f)
             {
                 timeDelta = 0;
-                Debug.Log("Update, rt.anchoredPosition: " + rt.anchoredPosition);
+                //Debug.Log("Update, rt.anchoredPosition: " + rt.anchoredPosition);
             }
         }
 
