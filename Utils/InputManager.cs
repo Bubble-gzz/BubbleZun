@@ -21,9 +21,13 @@ public class InputManager : Singleton<InputManager>
     {
         
     }
+    bool IsHoldingCtrlOrShift()
+    {
+        return Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+    }
     void Update()
     {
-        if (!IsEditingInputField()) {
+        if (!IsEditingInputField() && !IsHoldingCtrlOrShift()) {
             foreach (var keyEvent in keyEvents) {
                 if (Input.GetKeyDown(keyEvent.Key)) {
                     keyEvent.Value.Invoke();
