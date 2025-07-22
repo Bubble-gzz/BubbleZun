@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using BubbleZun.Effects.AnimationEffects;
+using BubbleZun.Utils;
 namespace BubbleZun.Interaction
 {
 public class Hierarchy : MonoBehaviour
 {
     // Start is called before the first frame update
+    public static UndoSystem undoSystem;
+    public static UnityEvent onRedoSetEntryParentOperation = new UnityEvent();
+    public static UnityEvent onUndoSetEntryParentOperation = new UnityEvent();
     public RectTransform rt;
     public RectTransform content;
     public float indent = 20;

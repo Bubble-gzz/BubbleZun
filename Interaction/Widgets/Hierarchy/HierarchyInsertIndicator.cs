@@ -7,6 +7,7 @@ using BubbleZun.Utils;
 namespace BubbleZun.Interaction {
 public class HierarchyInsertIndicator : MonoBehaviour
 {   
+    UndoSystem undoSystem => Hierarchy.undoSystem;
     public Hierarchy hierarchy;
     public HierarchyEntry InsertEntry;
     public bool InsertAfter;
@@ -31,6 +32,7 @@ public class HierarchyInsertIndicator : MonoBehaviour
             if (InsertAfter) {
                 hierarchy.MoveEntryAfter(hierarchy.currentDraggingEntry, InsertEntry);
             } else {
+                undoSystem?.Register(new SetHierarchyEntryParentOperation(hierarchy.currentDraggingEntry, InsertEntry));
                 hierarchy.ChangeEntryParent(hierarchy.currentDraggingEntry, InsertEntry);
             }
         }
