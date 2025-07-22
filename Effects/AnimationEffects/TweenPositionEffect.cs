@@ -15,7 +15,6 @@ namespace BubbleZun.Effects.AnimationEffects
         string tweenName = "TweenPosition_";
         void Awake()
         {
-            Debug.Log("TweenPosEffet Awake, Parent: " + transform.parent.name);
             useScreenSpace = GetComponentInParent<Canvas>() != null;
             rectTransform = GetComponent<RectTransform>();
             tweenName += gameObject.GetInstanceID();
