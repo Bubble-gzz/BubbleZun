@@ -18,11 +18,11 @@ public class SetHierarchyEntryParentOperation : Operation
     public override void Undo(bool mute = false)
     {
         entry.hierarchy.ChangeEntryParent(entry, oldParent);
-        Hierarchy.onUndoSetEntryParentOperation.Invoke();
+        Hierarchy.onUndoMoveEntryOperation.Invoke();
     }
     public override void Redo(bool mute = false)
     {
         entry.hierarchy.ChangeEntryParent(entry, newParent);
-        Hierarchy.onRedoSetEntryParentOperation.Invoke();
+        Hierarchy.onRedoMoveEntryOperation.Invoke();
     }
 }
