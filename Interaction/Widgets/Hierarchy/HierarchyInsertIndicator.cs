@@ -48,7 +48,7 @@ public class HierarchyInsertIndicator : MonoBehaviour
         float insertPos = localPoint.y;
         List<HierarchyEntry> entries = hierarchy.entries;
         for (int i = 0; i < entries.Count; i++) {
-            BDebug.Log("insertPos" + insertPos);
+            //BDebug.Log("insertPos" + insertPos);
             HierarchyEntry entry = entries[i];
             //string debugLog = "entry._y: " + entry._y + " insertPos: " + insertPos + " spacing: " + hierarchy.spacing;
             //if (entry.next != null) debugLog += " next._y: " + entry.next._y;
