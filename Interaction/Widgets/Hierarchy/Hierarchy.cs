@@ -81,7 +81,7 @@ public class Hierarchy : MonoBehaviour
             UpdateHierarchy(child, entry, depth + 1, show & entry.expanded);
         }
     }
-    public HierarchyEntry CreateEntry(HierarchyEntry parent, string id, object bindObject)
+    public HierarchyEntry CreateEntry(HierarchyEntry parent, string id, object bindObject, bool updateHierarchy = true)
     {
         HierarchyEntry newEntry = Instantiate(entryPrefab, content).GetComponent<HierarchyEntry>();
         newEntry.id = id;
@@ -104,7 +104,7 @@ public class Hierarchy : MonoBehaviour
         }
 
         newEntry.parent = parent;
-        UpdateHierarchy();
+        if (updateHierarchy) UpdateHierarchy();
         return newEntry;
     }
     public void AddSelectedEntry(HierarchyEntry entry)
