@@ -19,6 +19,7 @@ public class Hierarchy : MonoBehaviour
     public float leftPadding = 10, rightPadding = 10;
     public float topPadding = 10, bottomPadding = 10;
     public float entryHeight = 30;
+    public float viewportHeight = 800;
     float contentHeight;
     [HideInInspector] public List<HierarchyEntry> entries = new List<HierarchyEntry>();
     [HideInInspector] public HierarchyEntry root;
@@ -33,7 +34,10 @@ public class Hierarchy : MonoBehaviour
         if (content == null) content = GetComponent<RectTransform>();
         entryRendererPool = new ObjectPool(entryPrefab, 0, content);
     }
-
+    void Update()
+    {
+        RefreshUI();
+    }
     HierarchyEntry lastEntry;
     public void UpdateHierarchy()
     {
@@ -45,7 +49,7 @@ public class Hierarchy : MonoBehaviour
         rt.sizeDelta = new Vector2(rt.sizeDelta.x, contentHeight);
         onHierarchyChanged.Invoke();
         entries.Sort((a, b) => a.y.CompareTo(b.y)); //待优化
-        UpdateUI();
+        RefreshUI();
     }
     void UpdateHierarchy(HierarchyEntry entry, HierarchyEntry parent,int depth, bool show)
     {
@@ -142,18 +146,16 @@ public class Hierarchy : MonoBehaviour
         UpdateHierarchy();
     }
     int visibleRangeL, visibleRangeR;
-    void UpdateUI()
+    void RefreshUI()
     {
-        visibleRangeL = 0; visibleRangeR = entries.Count - 1;
+        visibleRangeL = entries.Count - 1; visibleRangeR = 0;
         for (int i = 0; i < entries.Count; i++)
         {
-            if (i < visibleRangeL || i > visibleRangeR) {
-                if (entries[i].renderer != null) {
-                    entries[i].renderer.Recycle();
-                    entries[i].renderer = null;
-                }
-            }
-            else {
+            HierarchyEntry entry = entries[i];
+            if (Visible(entry)) 
+            {
+                visibleRangeL = Mathf.Min(visibleRangeL, i);
+                visibleRangeR = Mathf.Max(visibleRangeR, i);
                 if (entries[i].renderer == null) {
                     HierarchyEntryRenderer entryRenderer = entryRendererPool.GetObject(content).GetComponent<HierarchyEntryRenderer>();
                     entryRenderer.entry = entries[i];
@@ -161,8 +163,22 @@ public class Hierarchy : MonoBehaviour
                     entryRenderer.Init();
                 }
             }
+            else {
+                if (entries[i].renderer != null) {
+                    entries[i].renderer.Recycle();
+                    entries[i].renderer = null;
+                }
+            }
         }
     }
-
+    virtual public bool InViewPort(HierarchyEntry entry)
+    {
+        float y = entry.y + transform.localPosition.y;
+        return y > - viewportHeight - entryHeight && y < entryHeight;
+    }
+    virtual public bool Visible(HierarchyEntry entry)
+    {
+        return entry.visible && InViewPort(entry);
+    }
 }
 }

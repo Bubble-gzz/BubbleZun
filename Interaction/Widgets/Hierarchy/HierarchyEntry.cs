@@ -55,7 +55,7 @@ public class HierarchyEntry
             renderer?.TurnOn();
             HierarchyEntry lastSelectedEntry = hierarchy.currentSelectedEntry;
             if (lastSelectedEntry != null) {
-                lastSelectedEntry.renderer.TurnOff();
+                lastSelectedEntry.renderer?.TurnOff();
                 lastSelectedEntry.selected = false;
             }
             hierarchy.ClearSelectedEntries();
