@@ -23,6 +23,7 @@ public class Hierarchy : MonoBehaviour
     [HideInInspector] public List<HierarchyEntry> entries = new List<HierarchyEntry>();
     [HideInInspector] public HierarchyEntry root;
     public GameObject entryPrefab;
+    ObjectPool entryRendererPool;
     [HideInInspector] public List<HierarchyEntry> currentSelectedEntries = new List<HierarchyEntry>();
     [HideInInspector] public HierarchyEntry currentSelectedEntry => currentSelectedEntries.Count == 1 ? currentSelectedEntries[0] : null;
     public UnityEvent onHierarchyChanged = new UnityEvent();
@@ -30,20 +31,7 @@ public class Hierarchy : MonoBehaviour
     {
         rt = GetComponent<RectTransform>();
         if (content == null) content = GetComponent<RectTransform>();
-    }
-    void Start()
-    {
-        /*
-        CreateEntry(null, "Root", null);
-        CreateEntry(root, "Loop1", null);
-        CreateEntry(root, "Loop2", null);
-*/
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        entryRendererPool = new ObjectPool(entryPrefab, 20);
     }
 
     HierarchyEntry lastEntry;
@@ -56,14 +44,15 @@ public class Hierarchy : MonoBehaviour
         contentHeight += topPadding + bottomPadding;
         rt.sizeDelta = new Vector2(rt.sizeDelta.x, contentHeight);
         onHierarchyChanged.Invoke();
+        entries.Sort((a, b) => a.y.CompareTo(b.y)); //待优化
+        UpdateUI();
     }
     void UpdateHierarchy(HierarchyEntry entry, HierarchyEntry parent,int depth, bool show)
     {
         entry.depth = depth;
         entry.parent = parent;
         entries.Add(entry);
-        entry.SetVisibility(show);
-        entry.UpdateUI();
+        entry.visible = show;
 
         if (show)
         {
@@ -83,19 +72,11 @@ public class Hierarchy : MonoBehaviour
     }
     public HierarchyEntry CreateEntry(HierarchyEntry parent, string id, object bindObject, bool updateHierarchy = true)
     {
-        HierarchyEntry newEntry = Instantiate(entryPrefab, content).GetComponent<HierarchyEntry>();
-        newEntry.gameObject.SetActive(false);
+        HierarchyEntry newEntry = new HierarchyEntry();
         newEntry.id = id;
         newEntry.hierarchy = this;
         newEntry.bindObject = bindObject;
         newEntry.expanded = false;
-        //Debug.Log("CreateEntry: " + newEntry.id);
-
-        RectTransform rt = newEntry.GetComponent<RectTransform>();
-
-        if (parent != null) {
-            rt.anchoredPosition = parent.GetComponent<RectTransform>().anchoredPosition;
-        }
 
         if (parent == null) root = newEntry;
         else {
@@ -160,5 +141,28 @@ public class Hierarchy : MonoBehaviour
 
         UpdateHierarchy();
     }
+    int visibleRangeL, visibleRangeR;
+    void UpdateUI()
+    {
+        visibleRangeL = 0; visibleRangeR = entries.Count - 1;
+        for (int i = 0; i < entries.Count; i++)
+        {
+            if (i < visibleRangeL || i > visibleRangeR) {
+                if (entries[i].renderer != null) {
+                    entries[i].renderer.Recycle();
+                    entries[i].renderer = null;
+                }
+            }
+            else {
+                if (entries[i].renderer == null) {
+                    HierarchyEntryRenderer entryRenderer = entryRendererPool.GetObject(content).GetComponent<HierarchyEntryRenderer>();
+                    entryRenderer.entry = entries[i];
+                    entries[i].renderer = entryRenderer;
+                    entryRenderer.Init();
+                }
+            }
+        }
+    }
+
 }
 }

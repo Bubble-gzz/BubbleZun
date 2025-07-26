@@ -53,13 +53,13 @@ public class HierarchyInsertIndicator : MonoBehaviour
             //string debugLog = "entry._y: " + entry._y + " insertPos: " + insertPos + " spacing: " + hierarchy.spacing;
             //if (entry.next != null) debugLog += " next._y: " + entry.next._y;
             //Debug.Log(debugLog);
-            if (Mathf.Abs(entry._y - insertPos) < hierarchy.spacing * 0.3f) {
+            if (Mathf.Abs(entry.y - insertPos) < hierarchy.spacing * 0.3f) {
                 InsertEntry = entry;
                 InsertAfter = false;
                 y = entry.y;
                 break;
             }
-            if (entry._y > insertPos && (entry.next == null || insertPos > entry.next._y + hierarchy.spacing * 0.3f)) {
+            if (entry.y > insertPos && (entry.next == null || insertPos > entry.next.y + hierarchy.spacing * 0.3f)) {
                 InsertEntry = entry;
                 InsertAfter = true;
                 y = entry.y - hierarchy.spacing * 0.5f;

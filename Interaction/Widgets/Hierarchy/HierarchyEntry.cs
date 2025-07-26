@@ -8,169 +8,23 @@ using TMPro;
 using BubbleZun.Utils;
 namespace BubbleZun.Interaction
 {
-public class HierarchyEntry : MonoBehaviour
+public class HierarchyEntry
 {
     // Start is called before the first frame update
     public Hierarchy hierarchy;
     public object bindObject;
     public int depth;
     public float y;
-    public float _y => rectTransform.localPosition.y;
+    public bool visible;
     public bool expanded;
-    public bool show{get; private set;}
     public HierarchyEntry parent;
     public HierarchyEntry prev, next;
+    public string id;
     public List<HierarchyEntry> children = new List<HierarchyEntry>();
     public bool hasChildren => children.Count > 0;
     public bool isRoot => hierarchy?.root == this;
-    InteractionObject interactionObject;
-
-    TweenAlphaEffect alphaEffect;
-    [SerializeField] TweenRotationEffect expandIcon;
-    [SerializeField] TweenAlphaEffect expandIconAlpha;
-    public string id{
-        get => text.text;
-        set => text.text = value;
-    }
-    public TMP_Text text;
-
-    void Awake()
-    {
-        if (selectState == null) selectState = GetComponent<ITwoPhase>();
-        rectTransform = GetComponent<RectTransform>();
-        if (alphaEffect == null) alphaEffect = GetComponent<TweenAlphaEffect>();
-    }
-    void Start()
-    {
-        if (expandIcon != null) expandIcon.SetRotation(expanded ? 1 : 0);        
-    }
-
-    // Update is called once per frame
-    RectTransform rectTransform;
-    bool lastShowState = false;
-    void Update()
-    {
-        Vector2 targetPos = new Vector2(rectTransform.anchoredPosition.x, y);
-        rectTransform.anchoredPosition = Vector2.Lerp(rectTransform.anchoredPosition, targetPos, Time.deltaTime * 10);
-        if (lastShowState != show)
-        {
-            if (interactionObject == null) interactionObject = GetComponent<InteractionObject>();
-            if (interactionObject != null) {
-                if (show) interactionObject.Enable();
-                else interactionObject.Disable();
-            }
-            lastShowState = show;
-        }
-        UpdateDragState();
-    }
-    public void SetVisibility(bool visible)
-    {
-        if (visible == show) return;
-        show = visible;
-        if (alphaEffect != null) alphaEffect.TweenAlpha(visible ? 1 : 0);
-    }
-
-    bool selected = false;
-    ITwoPhase selectState;
-    public void Select(bool exluded = true)
-    {
-        if (exluded)
-        {
-            if (selected) return;
-            selected = true;
-            TurnOn();
-            HierarchyEntry lastSelectedEntry = hierarchy.currentSelectedEntry;
-            if (lastSelectedEntry != null) {
-                lastSelectedEntry.TurnOff();
-                lastSelectedEntry.selected = false;
-            }
-            hierarchy.ClearSelectedEntries();
-            hierarchy.AddSelectedEntry(this);
-        }
-        else {
-            selected = !selected;
-            if (selected) {
-                TurnOn();
-                hierarchy.AddSelectedEntry(this);
-            }
-            else {
-                TurnOff();
-                hierarchy.RemoveSelectedEntry(this);
-            }
-        }
-    }
-    public void TurnOff()
-    {
-        selectState.TurnOff();
-    }
-    public void TurnOn()
-    {
-        selectState.TurnOn();
-    }
-    public void ToggleExpand()
-    {
-        expanded = !expanded;
-        if (expandIcon != null)
-        {
-            expandIcon.TweenRotation(expanded ? 1 : 0);
-        }
-        hierarchy.UpdateHierarchy();
-    }
-    public void UpdateUI()
-    {
-        if (expandIconAlpha != null) 
-        {
-            expandIconAlpha.TweenAlpha(children.Count > 0 ? 1 : 0);
-        }
-        if (expandIcon != null)
-        {
-            expandIcon.TweenRotation(expanded ? 1 : 0);
-        }
-        RectTransform rt = GetComponent<RectTransform>();
-        rt.anchorMin = new Vector2(0, 1);
-        rt.anchorMax = new Vector2(1, 1);
-        DOVirtual.Float(rt.offsetMin.x, hierarchy.leftPadding + hierarchy.indent * depth, 0.2f, (x) => rt.offsetMin = new Vector2(x, rt.offsetMin.y));
-        DOVirtual.Float(rt.offsetMax.x, -hierarchy.rightPadding, 0.2f, (x) => rt.offsetMax = new Vector2(x, rt.offsetMax.y));
-        DOVirtual.Float(rt.sizeDelta.y, hierarchy.entryHeight, 0.2f, (y) => rt.sizeDelta = new Vector2(rt.sizeDelta.x, y));
-    }
-    bool isDragging = false;
-    bool beforeDragStart = false;
-    float beforeDragCountdown = 0;
-    public void OnClick()
-    {
-        if (!isDragging) {
-            beforeDragStart = true;
-            beforeDragCountdown = 0.2f;
-        }
-    }
-    void UpdateDragState()
-    {
-        if (beforeDragStart)
-        {
-            if (Input.GetMouseButtonUp(0))
-            {
-                beforeDragStart = false;
-            }
-            else {
-                beforeDragCountdown -= Time.deltaTime;
-                if (beforeDragCountdown <= 0) {
-                    beforeDragStart = false;
-                    DragStart();
-                }
-            }
-        }
-        if (isDragging) {
-            if (Input.GetMouseButtonUp(0)) {
-                isDragging = false;
-                hierarchy.currentDraggingEntry = null;
-            }
-        }    
-    }
-    void DragStart()
-    {
-        hierarchy.currentDraggingEntry = this;
-        isDragging = true;
-    }
+    public HierarchyEntryRenderer renderer;
+ 
     public bool IsChildOf(HierarchyEntry entry)
     {
         HierarchyEntry parent = this;
@@ -188,7 +42,36 @@ public class HierarchyEntry : MonoBehaviour
         if (parent != null) parent.children.Remove(this);
         if (hierarchy.root == this) hierarchy.root = null;
         parent = null;
-        Destroy(gameObject);
+        renderer.Recycle();
+        renderer = null;
+    }
+    public bool selected;
+    public void Select(bool multiSelect = false)
+    {
+        if (!multiSelect)
+        {
+            if (selected) return;
+            selected = true;
+            renderer?.TurnOn();
+            HierarchyEntry lastSelectedEntry = hierarchy.currentSelectedEntry;
+            if (lastSelectedEntry != null) {
+                lastSelectedEntry.renderer.TurnOff();
+                lastSelectedEntry.selected = false;
+            }
+            hierarchy.ClearSelectedEntries();
+            hierarchy.AddSelectedEntry(this);
+        }
+        else {
+            selected = !selected;
+            if (selected) {
+                renderer?.TurnOn();
+                hierarchy.AddSelectedEntry(this);
+            }
+            else {
+                renderer?.TurnOff();
+                hierarchy.RemoveSelectedEntry(this);
+            }
+        }
     }
 }
 }
