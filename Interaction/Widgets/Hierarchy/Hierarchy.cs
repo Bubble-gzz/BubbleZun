@@ -84,6 +84,7 @@ public class Hierarchy : MonoBehaviour
     public HierarchyEntry CreateEntry(HierarchyEntry parent, string id, object bindObject, bool updateHierarchy = true)
     {
         HierarchyEntry newEntry = Instantiate(entryPrefab, content).GetComponent<HierarchyEntry>();
+        newEntry.gameObject.SetActive(false);
         newEntry.id = id;
         newEntry.hierarchy = this;
         newEntry.bindObject = bindObject;
