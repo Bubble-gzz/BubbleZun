@@ -11,12 +11,14 @@ namespace BubbleZun.Utils
     {
         GameObject prefab;
         List<GameObject> pool = new List<GameObject>();
-        public ObjectPool(GameObject prefab, int initialSize = 0)
+        Transform root;
+        public ObjectPool(GameObject prefab, int initialSize = 0, Transform root = null)
         {
             this.prefab = prefab;
+            this.root = root;
             for (int i = 0; i < initialSize; i++)
             {
-                GameObject obj = GameObject.Instantiate(prefab);
+                GameObject obj = GameObject.Instantiate(prefab, root);
                 obj.SetActive(false);
                 pool.Add(obj);
             }
@@ -31,7 +33,7 @@ namespace BubbleZun.Utils
             }
             if (obj == null)
             {
-                obj = GameObject.Instantiate(prefab);
+                obj = GameObject.Instantiate(prefab, root);
                 IObjectPoolable poolable = obj.GetComponent<IObjectPoolable>();
                 if (poolable != null) poolable.pool = this;
             }

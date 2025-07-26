@@ -31,7 +31,7 @@ public class Hierarchy : MonoBehaviour
     {
         rt = GetComponent<RectTransform>();
         if (content == null) content = GetComponent<RectTransform>();
-        entryRendererPool = new ObjectPool(entryPrefab, 20);
+        entryRendererPool = new ObjectPool(entryPrefab, 0, content);
     }
 
     HierarchyEntry lastEntry;
