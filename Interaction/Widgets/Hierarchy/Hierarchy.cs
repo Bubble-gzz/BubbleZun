@@ -80,12 +80,12 @@ public class Hierarchy : MonoBehaviour
         newEntry.id = id;
         newEntry.hierarchy = this;
         newEntry.bindObject = bindObject;
-        newEntry.expanded = false;
+        newEntry.expanded = true;
 
         if (parent == null) root = newEntry;
         else {
             parent.children.Add(newEntry);
-            parent.expanded = true;
+            if (updateHierarchy) parent.expanded = true;
             
         }
 
