@@ -110,8 +110,10 @@ public class HierarchyEntryRenderer : MonoBehaviour, IObjectPoolable
             rt.offsetMax = new Vector2(-hierarchy.rightPadding, rt.offsetMax.y);
             rt.sizeDelta = new Vector2(rt.sizeDelta.x, hierarchy.entryHeight);
         }
-        Vector2 targetPos = new Vector2(rectTransform.anchoredPosition.x, y);
-        rectTransform.anchoredPosition = targetPos;
+        if (!animated) {
+            Vector2 targetPos = new Vector2(rectTransform.anchoredPosition.x, y);
+            rectTransform.anchoredPosition = targetPos;
+        }
        
         if (entry?.selected ?? false) TurnOn();
         else TurnOff();
@@ -156,6 +158,11 @@ public class HierarchyEntryRenderer : MonoBehaviour, IObjectPoolable
     }
     public void Recycle()
     {
+        StartCoroutine(RecycleCoroutine());
+    }
+    IEnumerator RecycleCoroutine()
+    {
+        yield return new WaitForSeconds(0.2f);
         pool.Recycle(gameObject);
     }
 }

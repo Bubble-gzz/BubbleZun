@@ -69,6 +69,9 @@ public class Hierarchy : MonoBehaviour
         else {
             entry.y = parent.y;
         }
+
+        entry.renderer?.UpdateUI(true);
+
         contentHeight = Mathf.Max(contentHeight, - entry.y);
         foreach (HierarchyEntry child in entry.children) {
             UpdateHierarchy(child, entry, depth + 1, show & entry.expanded);
@@ -81,6 +84,7 @@ public class Hierarchy : MonoBehaviour
         newEntry.hierarchy = this;
         newEntry.bindObject = bindObject;
         newEntry.expanded = true;
+        newEntry.y = parent == null ? 0 : parent.y;
 
         if (parent == null) root = newEntry;
         else {
@@ -152,11 +156,11 @@ public class Hierarchy : MonoBehaviour
         for (int i = 0; i < entries.Count; i++)
         {
             HierarchyEntry entry = entries[i];
-            if (Visible(entry)) 
+            if (InViewPort(entry)) 
             {
                 visibleRangeL = Mathf.Min(visibleRangeL, i);
                 visibleRangeR = Mathf.Max(visibleRangeR, i);
-                if (entries[i].renderer == null) {
+                if (entries[i].renderer == null && entry.visible) {
                     HierarchyEntryRenderer entryRenderer = entryRendererPool.GetObject(content).GetComponent<HierarchyEntryRenderer>();
                     entryRenderer.entry = entries[i];
                     entries[i].renderer = entryRenderer;
@@ -175,10 +179,6 @@ public class Hierarchy : MonoBehaviour
     {
         float y = entry.y + transform.localPosition.y;
         return y > - viewportHeight - entryHeight && y < entryHeight;
-    }
-    virtual public bool Visible(HierarchyEntry entry)
-    {
-        return entry.visible && InViewPort(entry);
     }
 }
 }

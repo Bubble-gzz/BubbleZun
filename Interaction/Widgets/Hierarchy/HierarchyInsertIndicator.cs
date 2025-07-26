@@ -30,9 +30,11 @@ public class HierarchyInsertIndicator : MonoBehaviour
         UpdateUI();
         if (Input.GetMouseButtonUp(0) && hierarchy.currentDraggingEntry != null) {
             if (InsertAfter) {
+                Debug.Log("InsertAfter");
                 undoSystem?.Register(new MoveHierarchyEntryAfterOperation(hierarchy.currentDraggingEntry, InsertEntry));
                 hierarchy.MoveEntryAfter(hierarchy.currentDraggingEntry, InsertEntry);
             } else {
+                Debug.Log("SetParent");
                 undoSystem?.Register(new SetHierarchyEntryParentOperation(hierarchy.currentDraggingEntry, InsertEntry));
                 hierarchy.ChangeEntryParent(hierarchy.currentDraggingEntry, InsertEntry);
             }
