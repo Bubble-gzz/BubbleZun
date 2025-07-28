@@ -88,6 +88,7 @@ public class HierarchyEntryRenderer : MonoBehaviour, IObjectPoolable
         if (expandIconAlpha != null) 
         {
             int f = hasChildren ? 1 : 0;
+            BDebug.Log("UpdateUI: " + entry.id + " " + f);
             if (animated) expandIconAlpha.TweenAlpha(f);
             else expandIconAlpha.SetAlpha(f);
         }

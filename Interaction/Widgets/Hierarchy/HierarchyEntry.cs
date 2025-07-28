@@ -42,7 +42,7 @@ public class HierarchyEntry
         if (parent != null) parent.children.Remove(this);
         if (hierarchy.root == this) hierarchy.root = null;
         parent = null;
-        renderer.Recycle();
+        renderer?.Recycle();
         renderer = null;
     }
     public bool selected;
