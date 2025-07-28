@@ -89,7 +89,7 @@ public class Hierarchy : MonoBehaviour
         if (parent == null) root = newEntry;
         else {
             parent.children.Add(newEntry);
-            BDebug.Log("Add child: " + newEntry.id + " to " + parent.id);
+            //BDebug.Log("Add child: " + newEntry.id + " to " + parent.id);
             parent.expanded = true;
         }
 
