@@ -31,7 +31,7 @@ namespace BubbleZun.Interaction{
             interactionObject = interactable.interactionObject;
             bindInteractionObject = interactable.bindInteractionObject;
         }
-        protected bool IsInteractable()
+        protected bool IsInteractable() //待优化：如果没有发生变化，则不重新计算
         {
             if (!bindInteractionObject) return true;
             return interactionObject.IsInteractable();

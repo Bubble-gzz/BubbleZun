@@ -12,7 +12,7 @@ namespace BubbleZun.Interaction{
         // Start is called before the first frame update
         static public InputSystem instance;
         Dictionary<KeyCode, List<InputEvent>> keyEvents = new Dictionary<KeyCode, List<InputEvent>>();
-        List<InputEvent>[] MouseClickEvents = new List<InputEvent>[2]{new List<InputEvent>(), new List<InputEvent>()};
+        List<MouseClickEvent>[] MouseClickEvents = new List<MouseClickEvent>[2]{new List<MouseClickEvent>(), new List<MouseClickEvent>()};
 
         // Update is called once per frame
         void Update()
@@ -36,32 +36,34 @@ namespace BubbleZun.Interaction{
                 position = Input.mousePosition
             };
             EventSystem.current.RaycastAll(eventData, results);
+            /*
             string target = "";
             foreach (var result in results)
             {
                 target += result.gameObject.name + " ";
             }
             Debug.Log("raycast result: " + target);
-            List<InputEvent> events = new List<InputEvent>(MouseClickEvents[button]);
+            */
+            List<MouseClickEvent> events = new List<MouseClickEvent>(MouseClickEvents[button]);
             foreach (var evt in events)
             {
-                if (!evt.active || !results.Any(r => r.gameObject == evt.target)) continue;
+                if (!evt.active || !results.Any(r => evt.targets.Contains(r.gameObject))) continue;
                 evt.action();
                 if (evt.stopPropagation) break;
             }
         }
-        static public void AddMouseClickEvent(int button, InputEvent evt){
+        static public void AddMouseClickEvent(int button, MouseClickEvent evt){
             Instance._addMouseClickEvent(button, evt);
         }
-        static public void RemoveMouseClickEvent(int button, InputEvent evt){
+        static public void RemoveMouseClickEvent(int button, MouseClickEvent evt){
             Instance._removeMouseClickEvent(button, evt);
         }
-        public void _addMouseClickEvent(int button, InputEvent evt){
+        public void _addMouseClickEvent(int button, MouseClickEvent evt){
             if (MouseClickEvents[button].Contains(evt)) return;
             MouseClickEvents[button].Add(evt);
-            MouseClickEvents[button].Sort((a, b) => a.priority.CompareTo(b.priority));
+            MouseClickEvents[button].Sort((a, b) => a.priority > b.priority ? -1 : 1);
         }
-        public void _removeMouseClickEvent(int button, InputEvent evt){
+        public void _removeMouseClickEvent(int button, MouseClickEvent evt){
             if (MouseClickEvents[button].Contains(evt)) return;
             MouseClickEvents[button].Remove(evt);
         }
@@ -87,15 +89,19 @@ namespace BubbleZun.Interaction{
         public Action action;
         public bool stopPropagation;
         public bool active = true;
-        public GameObject target;
-        public InputEvent(Action action, GameObject target = null, int priority = 0, bool stopPropagation = false){
+        public InputEvent(Action action, int priority = 0, bool stopPropagation = false){
             this.priority = priority;
             this.action = action;
             this.stopPropagation = stopPropagation;
-            this.target = target;
         }
         public void Enable() => active = true;
         public void Disable() => active = false;
         public void SetPriority(int priority) => this.priority = priority;
+    }
+    public class MouseClickEvent : InputEvent{
+        public List<GameObject> targets = new List<GameObject>();
+        public MouseClickEvent(Action action, List<GameObject> targets = null, int priority = 0, bool stopPropagation = false) : base(action, priority, stopPropagation){
+            if (targets != null) this.targets = targets;
+        }
     }
 }

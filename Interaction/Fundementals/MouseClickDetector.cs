@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using BubbleZun.Utils;
 namespace BubbleZun.Interaction{
     interface IMouseClick{
         public UnityEvent OnLMBClick { get; }
@@ -15,13 +16,13 @@ namespace BubbleZun.Interaction{
         MouseDetector mouseDetector;
         public int priority = 0;
         public bool blockRaycast = false;
-        InputEvent lmbEvent;
-        InputEvent rmbEvent;
+        MouseClickEvent lmbEvent;
+        MouseClickEvent rmbEvent;
         protected override void Awake()
         {
             base.Awake();
-            lmbEvent = new InputEvent(() => OnPointerClick(0), gameObject, priority, blockRaycast);
-            rmbEvent = new InputEvent(() => OnPointerClick(1), gameObject, priority, blockRaycast);
+            lmbEvent = new MouseClickEvent(() => OnPointerClick(0), subObjects, priority, blockRaycast);
+            rmbEvent = new MouseClickEvent(() => OnPointerClick(1), subObjects, priority, blockRaycast);
             InputSystem.AddMouseClickEvent(0, lmbEvent);
             InputSystem.AddMouseClickEvent(1, rmbEvent);
         }
@@ -47,6 +48,7 @@ namespace BubbleZun.Interaction{
         }
         public void OnPointerClick(int button)
         {
+            BDebug.Log(gameObject.name + " clicked");
             if (!IsInteractable()) return;
             if (button == 0) {
                 onLMBClick.Invoke();

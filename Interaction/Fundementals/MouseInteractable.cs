@@ -13,7 +13,7 @@ namespace BubbleZun.Interaction{
         [HideInInspector] public bool useScreenSpace = false;
 
         public Collider2D detectArea;
-        public Graphic detectUI;
+        public List<GameObject> subObjects = new List<GameObject>();
         public UnityEvent onMouseEnter = new UnityEvent();
         public UnityEvent onMouseExit = new UnityEvent();
         protected override void Awake()
@@ -22,13 +22,24 @@ namespace BubbleZun.Interaction{
             useScreenSpace = GetComponentInParent<Canvas>() != null;
             if (!useScreenSpace) blockNonUIObject = false;
             if (detectArea == null) detectArea = GetComponent<Collider2D>();
-            if (detectUI == null) detectUI = GetComponent<Graphic>();
+            if (!subObjects.Contains(gameObject)) subObjects.Add(gameObject);
         }
+        bool IsInteractableLastFrame = false;
         protected virtual void Update()
         {
-            if (detectUI != null)
+            if (IsInteractableLastFrame != IsInteractable())
             {
-                detectUI.raycastTarget = IsInteractable();
+                UpdateRaycastTarget();
+                IsInteractableLastFrame = IsInteractable();
+            }
+        }
+        void UpdateRaycastTarget(){
+            foreach (var obj in subObjects)
+            {
+                foreach (var graphic in obj.GetComponents<Graphic>())
+                {
+                    graphic.raycastTarget = IsInteractable();
+                }
             }
         }
         public override void CopySettings(Interactable interactable){
