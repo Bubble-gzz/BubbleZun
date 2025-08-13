@@ -77,7 +77,7 @@ namespace BubbleZun.Interaction{
             if (!keyEvents.ContainsKey(key)) keyEvents[key] = new List<InputEvent>();
             if (keyEvents[key].Contains(evt)) return;
             keyEvents[key].Add(evt);
-            keyEvents[key].Sort((a, b) => a.priority.CompareTo(b.priority));
+            keyEvents[key].Sort((a, b) => a.priority > b.priority ? -1 : 1);
         }
         public void _removeKeyEvent(KeyCode key, InputEvent evt){
             if (!keyEvents.ContainsKey(key)) return;

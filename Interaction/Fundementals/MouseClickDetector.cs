@@ -48,7 +48,7 @@ namespace BubbleZun.Interaction{
         }
         public void OnPointerClick(int button)
         {
-            BDebug.Log(gameObject.name + " clicked");
+            //BDebug.Log(gameObject.name + " clicked");
             if (!IsInteractable()) return;
             if (button == 0) {
                 onLMBClick.Invoke();
