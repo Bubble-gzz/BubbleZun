@@ -10,10 +10,12 @@ namespace BubbleZun.Interaction
 public class TwoPhaseSwitch : Interactable, ITwoPhase
 {
     // Start is called before the first frame update
+    bool mixed = false;
     public bool state{get => isOn;}
     public bool isOn = false;
     public UnityEvent onTurnOn = new UnityEvent();
     public UnityEvent onTurnOff = new UnityEvent();
+    public UnityEvent onTurnMixed = new UnityEvent();
     public UnityEvent<bool> onStateChange = new UnityEvent<bool>();
     public List<IHighlightEffect> animatedEffects = new List<IHighlightEffect>();
     public bool ignoreRepeatedTrigger = true;
@@ -22,7 +24,7 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
     protected override void Start()
     {
         base.Start();
-        if (autoInitState)
+        if (autoInitState && !mixed)
         {
             if (isOn) {
                 isOn = false;
@@ -37,8 +39,19 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
     public void Toggle()
     {
         if (interactionObject != null && !interactionObject.IsInteractable()) return;
-        if (isOn) TurnOff();
-        else TurnOn();
+        if (mixed) {
+            TurnOn();
+        }
+        else {
+            if (isOn) TurnOff();
+            else TurnOn();
+        }
+    }
+    public void SetMixed()
+    {
+        if (ignoreRepeatedTrigger && mixed) return;
+        mixed = true;
+        onTurnMixed.Invoke();
     }
     public void SetState(bool state, bool animated = true)
     {
@@ -48,8 +61,9 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
     public void TurnOn(bool animated = true)
     {
         //if (interactionObject != null && !interactionObject.IsInteractable()) return;
-        if (ignoreRepeatedTrigger && isOn) return;
+        if (!mixed && ignoreRepeatedTrigger && isOn) return;
         isOn = true;
+        mixed = false;
         onTurnOn.Invoke();
         onStateChange.Invoke(true);
         //BDebug.Log("[" + gameObject.name + "] TurnOn");
@@ -64,12 +78,12 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
     public void TurnOff(bool animated = true)
     {
         //if (interactionObject != null && !interactionObject.IsInteractable()) return;
-        
-        if (ignoreRepeatedTrigger && !isOn) {
+        if (!mixed && ignoreRepeatedTrigger && !isOn) {
             //BDebug.Log("[" + gameObject.name + "] TurnOff but failed");
             return;
         }
         isOn = false;
+        mixed = false;
         onTurnOff.Invoke();
         onStateChange.Invoke(false);
         //BDebug.Log("[" + gameObject.name + "] TurnOff");
@@ -83,6 +97,9 @@ public class TwoPhaseSwitch : Interactable, ITwoPhase
     }
     public void ReplayCurrentState(bool animated = true)
     {
+        if (mixed) {
+            SetMixed();
+        }
         if (isOn) {
             isOn = false;
             TurnOn(animated);
