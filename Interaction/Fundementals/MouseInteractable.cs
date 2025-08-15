@@ -25,6 +25,11 @@ namespace BubbleZun.Interaction{
             if (!subObjects.Contains(gameObject)) subObjects.Add(gameObject);
         }
         bool IsInteractableLastFrame = false;
+        protected override void Start()
+        {
+            base.Start();
+            UpdateRaycastTarget();
+        }
         protected virtual void Update()
         {
             if (IsInteractableLastFrame != IsInteractable())
