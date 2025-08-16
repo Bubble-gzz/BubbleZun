@@ -36,6 +36,14 @@ namespace BubbleZun.Interaction{
             if (!bindInteractionObject) return true;
             return interactionObject.IsInteractable();
         }
+        public void Enable()
+        {
+            if (interactionObject != null) interactionObject.Enable();
+        }
+        public void Disable()
+        {
+            if (interactionObject != null) interactionObject.Disable();
+        }
         protected T InstallComponent<T>(ref T component) where T : Interactable
         {
             if (component == null) {

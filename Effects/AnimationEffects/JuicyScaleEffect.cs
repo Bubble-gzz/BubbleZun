@@ -14,35 +14,58 @@ namespace BubbleZun.Effects.AnimationEffects
         public float playSpeed = 1f;
         public void PopUp()
         {
+            StartCoroutine(PopUpCoroutine());
+        }
+        IEnumerator PopUpCoroutine()
+        {
             DOTween.Kill(transform);
             Vector3 targetScale = ScaleToVector3(popupScale);
-            transform.DOScale(targetScale, 0.1f / playSpeed).SetEase(Ease.Linear);
+            yield return transform.DOScale(targetScale, 0.1f / playSpeed).SetEase(Ease.Linear);
         }
         public void PopBack()
         {
+            StartCoroutine(PopBackCoroutine());
+        }
+        IEnumerator PopBackCoroutine()
+        {
             DOTween.Kill(transform);
             Vector3 targetScale = ScaleToVector3(normalScale);
-            transform.DOScale(targetScale, 0.1f / playSpeed).SetEase(Ease.Linear);
+            yield return transform.DOScale(targetScale, 0.1f / playSpeed).SetEase(Ease.Linear);
         }
         public void Squeeze()
         {
+            StartCoroutine(SqueezeCoroutine());
+        }
+        IEnumerator SqueezeCoroutine()
+        {
             DOTween.Kill(transform);
             Vector3 targetScale = ScaleToVector3(squeezeScale);
-            transform.localScale = targetScale;
-            transform.DOScale(ScaleToVector3(normalScale), 0.7f / playSpeed).SetEase(Ease.OutElastic);
+            yield return transform.DOScale(targetScale, 0.7f / playSpeed).SetEase(Ease.OutElastic);
         }
         public void BlastOut()
         {
+            StartCoroutine(BlastOutCoroutine());
+        }
+        IEnumerator BlastOutCoroutine()
+        {
             DOTween.Kill(transform);
             Vector3 targetScale = ScaleToVector3(blastScale);
-            transform.localScale = targetScale;
-            transform.DOScale(ScaleToVector3(normalScale), 0.1f / playSpeed).SetEase(Ease.OutSine);
+            yield return transform.DOScale(targetScale, 0.1f / playSpeed).SetEase(Ease.OutSine);
         }
         Vector3 ScaleToVector3(Vector2 scale)
         {
             Vector3 res = scale;
             res.z = transform.localScale.z;
             return res;
+        }
+        public void Pop()
+        {
+            StartCoroutine(PopCoroutine());
+        }
+        IEnumerator PopCoroutine()
+        {
+            yield return PopUpCoroutine();
+            yield return PopBackCoroutine();
         }
     }
 }
