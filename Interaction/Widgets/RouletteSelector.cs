@@ -37,26 +37,26 @@ public class RouletteSelector : MonoBehaviour
         UpdateSelectedItem();
     }
 
-    void UpdateSelectedItem()
+    void UpdateSelectedItem(bool mute = false)
     {
         if (selectedIndex == -1) {
             text.text = mixedOption;
-            onSelect.Invoke(mixedOption);
+            if (!mute) onSelect.Invoke(mixedOption);
         }
         else {
             text.text = options[selectedIndex];
-            onSelect.Invoke(options[selectedIndex]);
+            if (!mute) onSelect.Invoke(options[selectedIndex]);
         }
     }
     public void AddOption(string option)
     {
         options.Add(option);
     }
-    public void Select(int index)
+    public void Select(int index, bool mute = false)
     {
         if ((index < 0 || index >= options.Count) && index != -1) return;
         selectedIndex = index;
-        UpdateSelectedItem();
+        UpdateSelectedItem(mute);
     }
 }
 }
